@@ -19,6 +19,7 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import poormocap.Mocap;
 import poormocapplayer.MocapPlayer;
 
 public class Main extends SimpleApplication {
@@ -26,6 +27,7 @@ public class Main extends SimpleApplication {
     public static Material gold, magenta;
     Geometry geomSphere, geomBox;
     MocapPlayer player;
+    Mocap mocap;
     Skeleton[] skeletons;
 
     public static void main(String[] args) {
@@ -36,7 +38,8 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        player = new MocapPlayer("assets/etc/Test3.serial");
+       // player = new MocapPlayer("assets/etc/Test3.serial");
+        mocap = new Mocap();
         initGui();
         initMaterials();
         initLightandShadow();
@@ -47,10 +50,11 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        int[][] joints = player.getJoints();
+        //int[][] joints = player.getJoints();
+        int[][] joints = mocap.getJoints();
         if (joints != null) {
             for (Skeleton skeleton : skeletons) {
-                skeleton.setJoints(player.getJoints());
+                skeleton.setJoints(mocap.getJoints());
                 skeleton.draw();
             }
         }
