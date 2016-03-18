@@ -29,7 +29,8 @@ public class Main extends SimpleApplication {
     MocapPlayer player;
     Mocap mocap;
     Skeleton[] skeletons;
-
+    Skeleton player1;
+    
     public static void main(String[] args) {
         Main app = new Main();
         initAppScreen(app);
@@ -53,10 +54,12 @@ public class Main extends SimpleApplication {
         //int[][] joints = player.getJoints();
         int[][] joints = mocap.getJoints();
         if (joints != null) {
-            for (Skeleton skeleton : skeletons) {
+            /*for (Skeleton skeleton : skeletons) {
                 skeleton.setJoints(mocap.getJoints());
                 skeleton.draw();
-            }
+            }*/
+            player1.setJoints(mocap.getJoints());
+            player1.draw();
         }
     }
 
@@ -141,13 +144,16 @@ public class Main extends SimpleApplication {
     }
 
     private void initSkeletons() {
-        skeletons = new Skeleton[16];
+        /*skeletons = new Skeleton[1];
         for (int i = 0; i < skeletons.length; i++) {
             int indexX = i%4;
             int indexZ = i/4;
             skeletons[i] = new Skeleton(this);
             skeletons[i].setLocalTranslation(indexX * 2f - 3, -1, indexZ*2f - 3);
             rootNode.attachChild(skeletons[i]);
-        }
+        }*/
+        player1 = new Skeleton(this);
+        player1.setLocalTranslation( 0, 0, 0);
+        rootNode.attachChild(player1);
     }
 }
