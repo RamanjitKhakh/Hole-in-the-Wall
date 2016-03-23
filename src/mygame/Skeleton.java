@@ -47,7 +47,7 @@ public class Skeleton extends Node {
     Geometry head;
     // the jointIndices define the skeleton, they are pairs of
     // joint indices which are connected by bones
-    int[][] jointIndices = {{3, 2}, {2, 1}, {1, 0},
+   int[][] jointIndices = {{3, 2}, {2, 1}, {1, 0},
         {2, 8}, {8, 9}, {9, 10}, {10, 11},
         {2, 4}, {4, 5}, {5, 6}, {6, 7},
         {0, 16}, {16, 17}, {17, 18}, {18, 19},
@@ -67,9 +67,9 @@ public class Skeleton extends Node {
     // [1] - [3]. Also, it is in mm, and the z-axis points away from the viewer.
     public void setJoints(int[][] j) {
         for (int i = 0; i < j.length; i++) {
-            joints[i][0] = (float)j[i][1]*0.001f;
-            joints[i][1] = (float)j[i][2]*0.001f;
-            joints[i][2] = -(float)j[i][3]*0.001f;
+            joints[i][0] = (float)j[i][1]*0.0015f;
+            joints[i][1] = (float)j[i][2]*0.0015f;
+            joints[i][2] = -(float)j[i][3]*0.0015f;
         }
     }
 
@@ -114,7 +114,7 @@ public class Skeleton extends Node {
     }
 
     private void initBones() {
-        Cylinder c = new Cylinder(10, 10, 0.08f, 1f, true);
+        Cylinder c = new Cylinder(50, 50, 0.08f, 1f, true);
         Material matC = new Material(main.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
         matC.setBoolean("UseMaterialColors", true);
         matC.setColor("Ambient", ColorRGBA.Gray);
@@ -127,7 +127,7 @@ public class Skeleton extends Node {
             attachChild(bones[i]);
         }
         
-        Sphere s = new Sphere(10,10,0.2f);
+        Sphere s = new Sphere(20,20,0.25f);
         head = new Geometry("", s);
         head.setMaterial(matC);
         attachChild(head);

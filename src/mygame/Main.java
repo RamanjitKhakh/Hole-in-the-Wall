@@ -144,14 +144,7 @@ public class Main extends SimpleApplication {
     }
 
     private void initSkeletons() {
-        /*skeletons = new Skeleton[1];
-        for (int i = 0; i < skeletons.length; i++) {
-            int indexX = i%4;
-            int indexZ = i/4;
-            skeletons[i] = new Skeleton(this);
-            skeletons[i].setLocalTranslation(indexX * 2f - 3, -1, indexZ*2f - 3);
-            rootNode.attachChild(skeletons[i]);
-        }*/
+        
         player1 = new Skeleton(this);
         player1.setLocalTranslation( 0, 0, 0);
         rootNode.attachChild(player1);
