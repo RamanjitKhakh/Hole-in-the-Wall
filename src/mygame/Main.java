@@ -10,13 +10,17 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.system.AppSettings;
+import com.jme3.util.TangentBinormalGenerator;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import poormocap.Mocap;
@@ -28,8 +32,10 @@ public class Main extends SimpleApplication {
     Geometry geomSphere, geomBox;
     MocapPlayer player;
     Mocap mocap;
+		Node ayyLmaoNode;
     Skeleton[] skeletons;
     Skeleton player1;
+		Spatial wallModel;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -39,7 +45,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-       // player = new MocapPlayer("assets/etc/Test3.serial");
+        //player = new MocapPlayer("assets/etc/Test3.serial");
         mocap = new Mocap();
         initGui();
         initMaterials();
@@ -51,16 +57,20 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        //int[][] joints = player.getJoints();
+       // int[][] joints = player.getJoints();
         int[][] joints = mocap.getJoints();
         if (joints != null) {
-            /*for (Skeleton skeleton : skeletons) {
+           /* for (Skeleton skeleton : skeletons) {
                 skeleton.setJoints(mocap.getJoints());
                 skeleton.draw();
             }*/
-            player1.setJoints(mocap.getJoints());
+            player1.setJoints(player.getJoints());
             player1.draw();
         }
+				ayyLmaoNode.move(0, 0, -tpf);
+				if( ayyLmaoNode.getLocalTranslation().z <= -13)
+								ayyLmaoNode.setLocalTranslation(0.0f, 0.0f, 5f);
+				
     }
 
     // -------------------------------------------------------------------------
@@ -117,6 +127,27 @@ public class Main extends SimpleApplication {
     }
 
     private void initGeometries() {
+				
+				//hole wall	#1	
+				//wallModel = getAssetManager().loadModel("Models/wall2/wall2.j3o");
+				
+				//hole wall #3
+				//wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
+						
+				//hole wall #4
+				wallModel = getAssetManager().loadModel("Models/wall4/wall4.j3o");
+						
+				TangentBinormalGenerator.generate(wallModel);
+				ayyLmaoNode = new Node();
+				ayyLmaoNode.attachChild(wallModel);
+				ayyLmaoNode.setMaterial(gold);
+				wallModel.setLocalTranslation(0.0f, -0.5f, 5f);
+				wallModel.rotate(0,FastMath.HALF_PI, 0);
+				wallModel.scale(1.05f);
+				ayyLmaoNode.attachChild(wallModel);
+				rootNode.attachChild(ayyLmaoNode);
+						
+						
         // Materials must be initialized first
         // Large Sphere
         Sphere sphereLarge = new Sphere(32, 32, 1.5f);
@@ -139,14 +170,16 @@ public class Main extends SimpleApplication {
 
     private void initCam() {
         flyCam.setEnabled(true);
-        cam.setLocation(new Vector3f(1f, 3f, 10f));
+				flyCam.setMoveSpeed(10f);
+        cam.setLocation(new Vector3f(0f, -0.1f, -8f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+				
     }
 
     private void initSkeletons() {
         
         player1 = new Skeleton(this);
-        player1.setLocalTranslation( 0, 0, 0);
+        player1.setLocalTranslation( -0.2f, -0.7f, 0);
         rootNode.attachChild(player1);
     }
 }
