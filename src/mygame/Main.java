@@ -64,7 +64,7 @@ public class Main extends SimpleApplication {
                 skeleton.setJoints(mocap.getJoints());
                 skeleton.draw();
             }*/
-            player1.setJoints(player.getJoints());
+            player1.setJoints(mocap.getJoints());
             player1.draw();
         }
 				ayyLmaoNode.move(0, 0, -tpf);
