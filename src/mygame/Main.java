@@ -6,6 +6,8 @@ package mygame;
  * initMaterials(); initLightandShadow(); initGeometries(); initCam();
  */
 import com.jme3.app.SimpleApplication;
+import com.jme3.bounding.BoundingVolume;
+import com.jme3.collision.CollisionResults;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -67,10 +69,37 @@ public class Main extends SimpleApplication {
             player1.setJoints(mocap.getJoints());
             player1.draw();
         }
-				ayyLmaoNode.move(0, 0, -tpf);
-				if( ayyLmaoNode.getLocalTranslation().z <= -13)
-								ayyLmaoNode.setLocalTranslation(0.0f, 0.0f, 5f);
-				
+        
+//        CollisionResults res = new CollisionResults();
+//            for(int i =0; i < earth.terrian.size(); i++){
+//              Rocks r = earth.terrian.get(i);
+//              BoundingVolume hitbox = r.internal.getWorldBound();
+//              oto.otoNode.collideWith(hitbox, res );
+//              if( (res.size() > 0) ){
+//                  
+//                  new SingleBurstParticleEmitter(main ,oto.otoNode, r.getLocalTranslation());
+//                  res.clear();
+//                  hit++;
+//                  hitCounter.setText("Total Amount Hit " + hit); 
+//                 
+//              }
+//            }
+        CollisionResults result = new CollisionResults();
+        //ayyLmaoNode
+        BoundingVolume hitbox = wallModel.getWorldBound();//ayyLmaoNode.getChild(0).getWorldBound();
+        for(Geometry m : player1.bones){
+            m.collideWith(hitbox, result);
+            if(result.size() > 0 ){
+                result.clear();
+                //System.out.println("hit!!!");
+                new SingleBurstParticleEmitter((SimpleApplication)this, m.getParent(), m.getLocalTranslation());
+            }
+        }
+
+        ayyLmaoNode.move(0, 0, -tpf);
+        if( ayyLmaoNode.getLocalTranslation().z <= -13)
+            ayyLmaoNode.setLocalTranslation(0.0f, 0.0f, 5f);
+
     }
 
     // -------------------------------------------------------------------------
@@ -135,16 +164,18 @@ public class Main extends SimpleApplication {
 				//wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
 						
 				//hole wall #4
-				wallModel = getAssetManager().loadModel("Models/wall4/wall4.j3o");
+				wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
 						
 				TangentBinormalGenerator.generate(wallModel);
 				ayyLmaoNode = new Node();
 				ayyLmaoNode.attachChild(wallModel);
 				ayyLmaoNode.setMaterial(gold);
 				wallModel.setLocalTranslation(0.0f, -0.5f, 5f);
-				wallModel.rotate(0,FastMath.HALF_PI, 0);
+				//wallModel.rotate(0,FastMath.HALF_PI, 0);
 				wallModel.scale(1.05f);
 				ayyLmaoNode.attachChild(wallModel);
+                                ayyLmaoNode.updateModelBound();
+                                
 				rootNode.attachChild(ayyLmaoNode);
 						
 						
