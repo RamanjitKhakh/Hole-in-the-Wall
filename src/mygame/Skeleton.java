@@ -111,6 +111,8 @@ public class Skeleton extends Node {
         Vector3f center = start.add(end);
         center.multLocal(0.5f);
         bones[cylinderIndex].setLocalTranslation(center);
+        bones[cylinderIndex].updateGeometricState();
+        bones[cylinderIndex].updateModelBound();
     }
 
     private void initBones() {

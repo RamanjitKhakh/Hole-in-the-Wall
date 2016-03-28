@@ -86,10 +86,14 @@ public class Main extends SimpleApplication {
 //            }
         CollisionResults result = new CollisionResults();
         //ayyLmaoNode
+        
         BoundingVolume hitbox = wallModel.getWorldBound();//ayyLmaoNode.getChild(0).getWorldBound();
         for(Geometry m : player1.bones){
-            m.collideWith(hitbox, result);
-            if(result.size() > 0 ){
+            //System.out.println("" + m.getWorldMatrix() );
+            //m.getModelBound().collideWith(m, result);
+            
+            //m.collideWith(hitbox, result);
+            if( m.getWorldBound().intersects(hitbox) ){
                 result.clear();
                 //System.out.println("hit!!!");
                 new SingleBurstParticleEmitter((SimpleApplication)this, m.getParent(), m.getLocalTranslation());
@@ -164,7 +168,7 @@ public class Main extends SimpleApplication {
 				//wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
 						
 				//hole wall #4
-				wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
+				wallModel = getAssetManager().loadModel("Models/wall5/wall5.j3o");
 						
 				TangentBinormalGenerator.generate(wallModel);
 				ayyLmaoNode = new Node();
