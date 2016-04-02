@@ -7,6 +7,10 @@ package mygame;
  */
 import com.jme3.app.SimpleApplication;
 import com.jme3.bounding.BoundingVolume;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.joints.HingeJoint;
+import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResults;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -31,13 +35,16 @@ import poormocapplayer.MocapPlayer;
 public class Main extends SimpleApplication {
 
     public static Material gold, magenta;
-    Geometry geomSphere, geomBox;
+    Geometry geomSphere, geomBox, geomJoint;
     MocapPlayer player;
     Mocap mocap;
-		Node ayyLmaoNode;
+    Node ayyLmaoNode;
     Skeleton[] skeletons;
     Skeleton player1;
-		Spatial wallModel;
+    Spatial wallModel;
+    BulletAppState bullet;
+    RigidBodyControl wall, phyJoint;
+    HingeJoint joint;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -55,6 +62,7 @@ public class Main extends SimpleApplication {
         initGeometries();
         initCam();
         initSkeletons();
+        initPhysics();
     }
 
     @Override
@@ -62,32 +70,25 @@ public class Main extends SimpleApplication {
        // int[][] joints = player.getJoints();
         int[][] joints = mocap.getJoints();
         if (joints != null) {
-           /* for (Skeleton skeleton : skeletons) {
-                skeleton.setJoints(mocap.getJoints());
-                skeleton.draw();
-            }*/
+           
             player1.setJoints(mocap.getJoints());
             player1.draw();
         }
+
+      
         
-//        CollisionResults res = new CollisionResults();
-//            for(int i =0; i < earth.terrian.size(); i++){
-//              Rocks r = earth.terrian.get(i);
-//              BoundingVolume hitbox = r.internal.getWorldBound();
-//              oto.otoNode.collideWith(hitbox, res );
-//              if( (res.size() > 0) ){
-//                  
-//                  new SingleBurstParticleEmitter(main ,oto.otoNode, r.getLocalTranslation());
-//                  res.clear();
-//                  hit++;
-//                  hitCounter.setText("Total Amount Hit " + hit); 
-//                 
-//              }
-//            }
         CollisionResults result = new CollisionResults();
-        //ayyLmaoNode
+        /*Vector3f current = wall.getPhysicsLocation();
+        current.z -= tpf;
+        wall.setPhysicsLocation(current);
+        */
         
-        BoundingVolume hitbox = wallModel.getWorldBound();//ayyLmaoNode.getChild(0).getWorldBound();
+        Vector3f current = phyJoint.getPhysicsLocation();
+        current.z -= tpf;
+        phyJoint.setPhysicsLocation(current);
+        
+        
+        /*BoundingVolume hitbox = wallModel.getWorldBound();//ayyLmaoNode.getChild(0).getWorldBound();
         for(Geometry m : player1.bones){
             //System.out.println("" + m.getWorldMatrix() );
             //m.getModelBound().collideWith(m, result);
@@ -96,14 +97,14 @@ public class Main extends SimpleApplication {
             if( m.getWorldBound().intersects(hitbox) ){
                 result.clear();
                 //System.out.println("hit!!!");
-                new SingleBurstParticleEmitter((SimpleApplication)this, m.getParent(), m.getLocalTranslation());
+                //new SingleBurstParticleEmitter((SimpleApplication)this, m.getParent(), m.getLocalTranslation());
             }
         }
 
         ayyLmaoNode.move(0, 0, -tpf);
         if( ayyLmaoNode.getLocalTranslation().z <= -13)
             ayyLmaoNode.setLocalTranslation(0.0f, 0.0f, 5f);
-
+            */
     }
 
     // -------------------------------------------------------------------------
@@ -168,21 +169,26 @@ public class Main extends SimpleApplication {
 				//wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
 						
 				//hole wall #4
-				wallModel = getAssetManager().loadModel("Models/wall5/wall5.j3o");
+				wallModel = getAssetManager().loadModel("Models/wall4/wall4.j3o");
 						
 				TangentBinormalGenerator.generate(wallModel);
 				ayyLmaoNode = new Node();
 				ayyLmaoNode.attachChild(wallModel);
 				ayyLmaoNode.setMaterial(gold);
-				wallModel.setLocalTranslation(0.0f, -0.5f, 5f);
+				wallModel.setLocalTranslation(0.0f, 1f, 5f);
 				//wallModel.rotate(0,FastMath.HALF_PI, 0);
-				wallModel.scale(1.05f);
+				//wallModel.scale(1.05f);
 				ayyLmaoNode.attachChild(wallModel);
                                 ayyLmaoNode.updateModelBound();
-                                
+                                //ayyLmaoNode.setLocalTranslation(0, 5f, 5f);
 				rootNode.attachChild(ayyLmaoNode);
 						
-						
+	//joint sphere
+        Sphere jointSphere = new Sphere(32, 32, 0.1f);
+        geomJoint = new Geometry("joint", jointSphere);
+        geomJoint.setMaterial(gold);
+        geomJoint.setLocalTranslation(0, 1, 5f);
+        rootNode.attachChild(geomJoint);
         // Materials must be initialized first
         // Large Sphere
         Sphere sphereLarge = new Sphere(32, 32, 1.5f);
@@ -205,7 +211,7 @@ public class Main extends SimpleApplication {
 
     private void initCam() {
         flyCam.setEnabled(true);
-				flyCam.setMoveSpeed(10f);
+	flyCam.setMoveSpeed(10f);
         cam.setLocation(new Vector3f(0f, -0.1f, -8f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 				
@@ -217,4 +223,42 @@ public class Main extends SimpleApplication {
         player1.setLocalTranslation( -0.2f, -0.7f, 0);
         rootNode.attachChild(player1);
     }
+    
+    private void initPhysics(){
+        bullet = new BulletAppState();
+        bullet.setDebugEnabled(true);
+        stateManager.attach(bullet);
+        
+        
+        RigidBodyControl weight = new RigidBodyControl(10.0f);
+        player1.addControl(weight);
+        bullet.getPhysicsSpace().add(weight);
+        
+        RigidBodyControl ground = new RigidBodyControl(0.0f);
+        geomBox.addControl(ground);
+        bullet.getPhysicsSpace().add(ground);
+        
+        
+        wall = new RigidBodyControl(CollisionShapeFactory.createMeshShape(wallModel), 1.0f);
+        wallModel.addControl(wall);
+        bullet.getPhysicsSpace().add(wall);
+        
+        
+        phyJoint = new RigidBodyControl(0.0f);
+        geomJoint.addControl(phyJoint);
+        bullet.getPhysicsSpace().add(phyJoint);
+        
+            // connect small and large sphere by a HingeJoint
+        joint = new HingeJoint(
+                phyJoint,
+                wall,
+                new Vector3f(0f, 0f, 0f), // pivot point local to A
+                new Vector3f(0f, 1.9f, 0f), // pivot point local to B 
+                Vector3f.UNIT_Z, // DoF Axis of A (Z axis)
+                Vector3f.UNIT_Z);        // DoF Axis of B (Z axis)
+        bullet.getPhysicsSpace().add(joint);
+        bullet.setDebugEnabled(true);
+        
+    }
 }
+
