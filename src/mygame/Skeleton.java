@@ -1,5 +1,9 @@
 package mygame;
 
+import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.CylinderCollisionShape;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -45,6 +49,7 @@ public class Skeleton extends Node {
     // bones connect joints
     Geometry[] bones;
     Geometry head;
+    BulletAppState bullet;
     // the jointIndices define the skeleton, they are pairs of
     // joint indices which are connected by bones
    int[][] jointIndices = {{3, 2}, {2, 1}, {1, 0},
@@ -58,6 +63,7 @@ public class Skeleton extends Node {
         this.main = main;
         joints = new float[20][3];
         bones = new Geometry[jointIndices.length];
+        this.bullet = main.bullet;
         initBones();
     }
 
@@ -127,6 +133,12 @@ public class Skeleton extends Node {
             bones[i] = new Geometry("", c);
             bones[i].setMaterial(matC);
             attachChild(bones[i]);
+            
+            //initialize physics
+            RigidBodyControl weight = new RigidBodyControl(new CylinderCollisionShape(new Vector3f(0.1f,0.3f,0.2f)),1.0f);
+            weight.setKinematic(true);
+            bones[i].addControl(weight);
+            bullet.getPhysicsSpace().add(weight);
         }
         
         Sphere s = new Sphere(20,20,0.25f);

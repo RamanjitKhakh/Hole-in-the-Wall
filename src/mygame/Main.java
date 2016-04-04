@@ -54,27 +54,28 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        //player = new MocapPlayer("assets/etc/Test3.serial");
-        mocap = new Mocap();
+        player = new MocapPlayer("assets/etc/Test3.serial");
+        //mocap = new Mocap();
         initGui();
         initMaterials();
         initLightandShadow();
         initGeometries();
         initCam();
-        initSkeletons();
         initPhysics();
+        initSkeletons();
+        
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-       // int[][] joints = player.getJoints();
-        int[][] joints = mocap.getJoints();
+        int[][] joints = player.getJoints();
+        //int[][] joints = mocap.getJoints();
         if (joints != null) {
            
-            player1.setJoints(mocap.getJoints());
+            player1.setJoints(player.getJoints());
             player1.draw();
         }
-
+        
       
         
         CollisionResults result = new CollisionResults();
@@ -86,6 +87,7 @@ public class Main extends SimpleApplication {
         Vector3f current = phyJoint.getPhysicsLocation();
         current.z -= tpf;
         phyJoint.setPhysicsLocation(current);
+       
         
         
         /*BoundingVolume hitbox = wallModel.getWorldBound();//ayyLmaoNode.getChild(0).getWorldBound();
@@ -162,32 +164,32 @@ public class Main extends SimpleApplication {
 
     private void initGeometries() {
 				
-				//hole wall	#1	
-				//wallModel = getAssetManager().loadModel("Models/wall2/wall2.j3o");
-				
-				//hole wall #3
-				//wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
-						
-				//hole wall #4
-				wallModel = getAssetManager().loadModel("Models/wall4/wall4.j3o");
-						
-				TangentBinormalGenerator.generate(wallModel);
-				ayyLmaoNode = new Node();
-				ayyLmaoNode.attachChild(wallModel);
-				ayyLmaoNode.setMaterial(gold);
-				wallModel.setLocalTranslation(0.0f, 1f, 5f);
-				//wallModel.rotate(0,FastMath.HALF_PI, 0);
-				//wallModel.scale(1.05f);
-				ayyLmaoNode.attachChild(wallModel);
-                                ayyLmaoNode.updateModelBound();
-                                //ayyLmaoNode.setLocalTranslation(0, 5f, 5f);
-				rootNode.attachChild(ayyLmaoNode);
+        //hole wall	#1	
+        //wallModel = getAssetManager().loadModel("Models/wall2/wall2.j3o");
+
+        //hole wall #3
+        //wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
+
+        //hole wall #4
+        wallModel = getAssetManager().loadModel("Models/wall4/wall4.j3o");
+
+        TangentBinormalGenerator.generate(wallModel);
+        ayyLmaoNode = new Node();
+        ayyLmaoNode.attachChild(wallModel);
+        ayyLmaoNode.setMaterial(gold);
+        wallModel.setLocalTranslation(0.0f, 3f, 5f);
+        //wallModel.rotate(0,FastMath.HALF_PI, 0);
+        //wallModel.scale(1.05f);
+        ayyLmaoNode.attachChild(wallModel);
+        ayyLmaoNode.updateModelBound();
+        ayyLmaoNode.move(0, 2, 0);
+        rootNode.attachChild(ayyLmaoNode);
 						
 	//joint sphere
         Sphere jointSphere = new Sphere(32, 32, 0.1f);
         geomJoint = new Geometry("joint", jointSphere);
         geomJoint.setMaterial(gold);
-        geomJoint.setLocalTranslation(0, 1, 5f);
+        geomJoint.setLocalTranslation(0, 2, 5f);
         rootNode.attachChild(geomJoint);
         // Materials must be initialized first
         // Large Sphere
@@ -226,13 +228,15 @@ public class Main extends SimpleApplication {
     
     private void initPhysics(){
         bullet = new BulletAppState();
-        bullet.setDebugEnabled(true);
+       
         stateManager.attach(bullet);
+         bullet.setDebugEnabled(true);
         
         
-        RigidBodyControl weight = new RigidBodyControl(10.0f);
-        player1.addControl(weight);
-        bullet.getPhysicsSpace().add(weight);
+//        RigidBodyControl weight = new RigidBodyControl(CollisionShapeFactory.createMeshShape(player1),1.0f);
+//        weight.setKinematic(true);
+//        player1.addControl(weight);
+//        bullet.getPhysicsSpace().add(weight);
         
         RigidBodyControl ground = new RigidBodyControl(0.0f);
         geomBox.addControl(ground);
@@ -254,8 +258,9 @@ public class Main extends SimpleApplication {
                 wall,
                 new Vector3f(0f, 0f, 0f), // pivot point local to A
                 new Vector3f(0f, 1.9f, 0f), // pivot point local to B 
-                Vector3f.UNIT_Z, // DoF Axis of A (Z axis)
-                Vector3f.UNIT_Z);        // DoF Axis of B (Z axis)
+                Vector3f.UNIT_X, // DoF Axis of A (Z axis)
+                Vector3f.UNIT_X);        // DoF Axis of B (Z axis)
+   
         bullet.getPhysicsSpace().add(joint);
         bullet.setDebugEnabled(true);
         
