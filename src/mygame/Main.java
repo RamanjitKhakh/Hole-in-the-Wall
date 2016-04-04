@@ -177,28 +177,22 @@ public class Main extends SimpleApplication {
         ayyLmaoNode = new Node();
         ayyLmaoNode.attachChild(wallModel);
         ayyLmaoNode.setMaterial(gold);
-        wallModel.setLocalTranslation(0.0f, 3f, 5f);
+        wallModel.setLocalTranslation(0.0f, 0f, 5f);//changed z
         //wallModel.rotate(0,FastMath.HALF_PI, 0);
         //wallModel.scale(1.05f);
         ayyLmaoNode.attachChild(wallModel);
         ayyLmaoNode.updateModelBound();
-        ayyLmaoNode.move(0, 2, 0);
+        //ayyLmaoNode.move(0, 2, 0);
         rootNode.attachChild(ayyLmaoNode);
 						
 	//joint sphere
         Sphere jointSphere = new Sphere(32, 32, 0.1f);
         geomJoint = new Geometry("joint", jointSphere);
         geomJoint.setMaterial(gold);
-        geomJoint.setLocalTranslation(0, 2, 5f);
+        geomJoint.setLocalTranslation(0, 3, 5f);
         rootNode.attachChild(geomJoint);
         // Materials must be initialized first
-        // Large Sphere
-        Sphere sphereLarge = new Sphere(32, 32, 1.5f);
-        geomSphere = new Geometry("Shiny", sphereLarge);
-        geomSphere.setMaterial(gold);
-        geomSphere.setLocalTranslation(0, 2f, 0);
-        //rootNode.attachChild(geomSphere);
-
+        
         // Ground
         Box box = new Box(8f, 2f, 8f);
         geomBox = new Geometry("ground", box);
@@ -207,7 +201,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(geomBox);
 
         // define shadow behavior
-        geomSphere.setShadowMode(ShadowMode.CastAndReceive);
+        //geomSphere.setShadowMode(ShadowMode.CastAndReceive);
         geomBox.setShadowMode(ShadowMode.Receive);
     }
 
@@ -257,10 +251,10 @@ public class Main extends SimpleApplication {
                 phyJoint,
                 wall,
                 new Vector3f(0f, 0f, 0f), // pivot point local to A
-                new Vector3f(0f, 1.9f, 0f), // pivot point local to B 
+                new Vector3f(0f, 3.2f, 0f), // pivot point local to B 
                 Vector3f.UNIT_X, // DoF Axis of A (Z axis)
                 Vector3f.UNIT_X);        // DoF Axis of B (Z axis)
-   
+        
         bullet.getPhysicsSpace().add(joint);
         bullet.setDebugEnabled(true);
         
