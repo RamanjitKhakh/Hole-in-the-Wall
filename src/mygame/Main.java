@@ -6,7 +6,6 @@ package mygame;
  * initMaterials(); initLightandShadow(); initGeometries(); initCam();
  */
 import com.jme3.app.SimpleApplication;
-import com.jme3.bounding.BoundingVolume;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.joints.HingeJoint;
@@ -16,7 +15,6 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
@@ -76,37 +74,11 @@ public class Main extends SimpleApplication {
             player1.draw();
         }
         
-      
-        
         CollisionResults result = new CollisionResults();
-        /*Vector3f current = wall.getPhysicsLocation();
-        current.z -= tpf;
-        wall.setPhysicsLocation(current);
-        */
-        
         Vector3f current = phyJoint.getPhysicsLocation();
         current.z -= tpf;
         phyJoint.setPhysicsLocation(current);
        
-        
-        
-        /*BoundingVolume hitbox = wallModel.getWorldBound();//ayyLmaoNode.getChild(0).getWorldBound();
-        for(Geometry m : player1.bones){
-            //System.out.println("" + m.getWorldMatrix() );
-            //m.getModelBound().collideWith(m, result);
-            
-            //m.collideWith(hitbox, result);
-            if( m.getWorldBound().intersects(hitbox) ){
-                result.clear();
-                //System.out.println("hit!!!");
-                //new SingleBurstParticleEmitter((SimpleApplication)this, m.getParent(), m.getLocalTranslation());
-            }
-        }
-
-        ayyLmaoNode.move(0, 0, -tpf);
-        if( ayyLmaoNode.getLocalTranslation().z <= -13)
-            ayyLmaoNode.setLocalTranslation(0.0f, 0.0f, 5f);
-            */
     }
 
     // -------------------------------------------------------------------------
@@ -177,12 +149,9 @@ public class Main extends SimpleApplication {
         ayyLmaoNode = new Node();
         ayyLmaoNode.attachChild(wallModel);
         ayyLmaoNode.setMaterial(gold);
-        wallModel.setLocalTranslation(0.0f, 0f, 5f);//changed z
-        //wallModel.rotate(0,FastMath.HALF_PI, 0);
-        //wallModel.scale(1.05f);
+        wallModel.setLocalTranslation(0.0f, 0f, 5f);
         ayyLmaoNode.attachChild(wallModel);
         ayyLmaoNode.updateModelBound();
-        //ayyLmaoNode.move(0, 2, 0);
         rootNode.attachChild(ayyLmaoNode);
 						
 	//joint sphere
@@ -224,14 +193,8 @@ public class Main extends SimpleApplication {
         bullet = new BulletAppState();
        
         stateManager.attach(bullet);
-         bullet.setDebugEnabled(true);
-        
-        
-//        RigidBodyControl weight = new RigidBodyControl(CollisionShapeFactory.createMeshShape(player1),1.0f);
-//        weight.setKinematic(true);
-//        player1.addControl(weight);
-//        bullet.getPhysicsSpace().add(weight);
-        
+        bullet.setDebugEnabled(true);
+         
         RigidBodyControl ground = new RigidBodyControl(0.0f);
         geomBox.addControl(ground);
         bullet.getPhysicsSpace().add(ground);
@@ -246,14 +209,14 @@ public class Main extends SimpleApplication {
         geomJoint.addControl(phyJoint);
         bullet.getPhysicsSpace().add(phyJoint);
         
-            // connect small and large sphere by a HingeJoint
+        // connect small and large sphere by a HingeJoint
         joint = new HingeJoint(
                 phyJoint,
                 wall,
                 new Vector3f(0f, 0f, 0f), // pivot point local to A
-                new Vector3f(0f, 3.2f, 0f), // pivot point local to B 
-                Vector3f.UNIT_X, // DoF Axis of A (Z axis)
-                Vector3f.UNIT_X);        // DoF Axis of B (Z axis)
+                new Vector3f(0f, 3f, 0f), // pivot point local to B 
+                Vector3f.UNIT_X, // DoF Axis of A (x axis)
+                Vector3f.UNIT_X);        // DoF Axis of B (x axis)
         
         bullet.getPhysicsSpace().add(joint);
         bullet.setDebugEnabled(true);
