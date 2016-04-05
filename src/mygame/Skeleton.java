@@ -135,7 +135,7 @@ public class Skeleton extends Node {
             attachChild(bones[i]);
             
             //initialize physics
-            RigidBodyControl weight = new RigidBodyControl(new CylinderCollisionShape(new Vector3f(0.1f,0.3f,0.2f)),1.0f);
+            RigidBodyControl weight = new RigidBodyControl(new CylinderCollisionShape(new Vector3f(0.1f,0.3f,0.2f)),60.0f);
             weight.setKinematic(true);
             bones[i].addControl(weight);
             bullet.getPhysicsSpace().add(weight);

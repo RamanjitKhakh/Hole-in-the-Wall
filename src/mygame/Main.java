@@ -76,8 +76,9 @@ public class Main extends SimpleApplication {
         
         CollisionResults result = new CollisionResults();
         Vector3f current = phyJoint.getPhysicsLocation();
-        current.z -= tpf;
+        current.z -= (3*tpf)/5;
         phyJoint.setPhysicsLocation(current);
+        wall.activate();
        
     }
 
@@ -150,7 +151,7 @@ public class Main extends SimpleApplication {
         ayyLmaoNode.attachChild(wallModel);
         ayyLmaoNode.setMaterial(gold);
         wallModel.setLocalTranslation(0.0f, 0f, 5f);
-        ayyLmaoNode.attachChild(wallModel);
+        //ayyLmaoNode.attachChild(wallModel);
         ayyLmaoNode.updateModelBound();
         rootNode.attachChild(ayyLmaoNode);
 						
@@ -158,7 +159,7 @@ public class Main extends SimpleApplication {
         Sphere jointSphere = new Sphere(32, 32, 0.1f);
         geomJoint = new Geometry("joint", jointSphere);
         geomJoint.setMaterial(gold);
-        geomJoint.setLocalTranslation(0, 3, 5f);
+        geomJoint.setLocalTranslation(0, 3.5f, 5f);
         rootNode.attachChild(geomJoint);
         // Materials must be initialized first
         
@@ -200,7 +201,7 @@ public class Main extends SimpleApplication {
         bullet.getPhysicsSpace().add(ground);
         
         
-        wall = new RigidBodyControl(CollisionShapeFactory.createMeshShape(wallModel), 1.0f);
+        wall = new RigidBodyControl(CollisionShapeFactory.createMeshShape(wallModel), 60.0f);
         wallModel.addControl(wall);
         bullet.getPhysicsSpace().add(wall);
         
@@ -213,10 +214,12 @@ public class Main extends SimpleApplication {
         joint = new HingeJoint(
                 phyJoint,
                 wall,
-                new Vector3f(0f, 0f, 0f), // pivot point local to A
-                new Vector3f(0f, 3f, 0f), // pivot point local to B 
+                new Vector3f(0f, 0f, 0), // pivot point local to A
+                new Vector3f(0f, 3.5f, 0), // pivot point local to B 
                 Vector3f.UNIT_X, // DoF Axis of A (x axis)
                 Vector3f.UNIT_X);        // DoF Axis of B (x axis)
+        
+        joint.enableMotor(true, 0.01f, 60f);
         
         bullet.getPhysicsSpace().add(joint);
         bullet.setDebugEnabled(true);
