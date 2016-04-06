@@ -80,12 +80,16 @@ public class Main extends SimpleApplication {
             player1.draw();
         }
         
-        CollisionResults result = new CollisionResults();
+        
         Vector3f current = phyJoint.getPhysicsLocation();
         current.z += (4*tpf)/5;
         phyJoint.setPhysicsLocation(current);
         wall.activate();
-       
+        //System.out.println("hinge "+joint.getHingeAngle());
+        if(joint.getHingeAngle() < -0.60f){
+            System.out.println("You Lost");
+        }
+        
     }
 
     // -------------------------------------------------------------------------
