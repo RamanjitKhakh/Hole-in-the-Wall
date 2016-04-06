@@ -15,6 +15,7 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
@@ -81,7 +82,7 @@ public class Main extends SimpleApplication {
         
         CollisionResults result = new CollisionResults();
         Vector3f current = phyJoint.getPhysicsLocation();
-        current.z -= (3*tpf)/5;
+        current.z += (4*tpf)/5;
         phyJoint.setPhysicsLocation(current);
         wall.activate();
        
@@ -155,7 +156,7 @@ public class Main extends SimpleApplication {
         ayyLmaoNode = new Node();
         ayyLmaoNode.attachChild(wallModel);
         ayyLmaoNode.setMaterial(gold);
-        wallModel.setLocalTranslation(0.0f, 0f, 5f);
+        wallModel.setLocalTranslation(0.0f, 0f, -5f);
         //ayyLmaoNode.attachChild(wallModel);
         ayyLmaoNode.updateModelBound();
         rootNode.attachChild(ayyLmaoNode);
@@ -164,7 +165,7 @@ public class Main extends SimpleApplication {
         Sphere jointSphere = new Sphere(32, 32, 0.1f);
         geomJoint = new Geometry("joint", jointSphere);
         geomJoint.setMaterial(gold);
-        geomJoint.setLocalTranslation(0, 3.5f, 5f);
+        geomJoint.setLocalTranslation(0, 3.5f, -5f);
         rootNode.attachChild(geomJoint);
         // Materials must be initialized first
         
@@ -183,7 +184,7 @@ public class Main extends SimpleApplication {
     private void initCam() {
         flyCam.setEnabled(true);
 	flyCam.setMoveSpeed(10f);
-        cam.setLocation(new Vector3f(0f, -0.1f, -8f));
+        cam.setLocation(new Vector3f(0f, 0.1f, 8f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 				
     }
@@ -191,7 +192,9 @@ public class Main extends SimpleApplication {
     private void initSkeletons() {
         
         player1 = new Skeleton(this);
+        player1.rotate(0, 3.14f, 0);
         player1.setLocalTranslation( -0.2f, -0.7f, 0);
+        
         rootNode.attachChild(player1);
     }
     
@@ -224,7 +227,7 @@ public class Main extends SimpleApplication {
                 Vector3f.UNIT_X, // DoF Axis of A (x axis)
                 Vector3f.UNIT_X);        // DoF Axis of B (x axis)
         
-        joint.enableMotor(true, 0f, 60f);
+        joint.enableMotor(true, 0f, 120f);
         
         bullet.getPhysicsSpace().add(joint);
         bullet.setDebugEnabled(true);
