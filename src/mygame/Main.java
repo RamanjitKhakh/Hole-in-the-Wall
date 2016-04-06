@@ -43,6 +43,7 @@ public class Main extends SimpleApplication {
     BulletAppState bullet;
     RigidBodyControl wall, phyJoint;
     HingeJoint joint;
+    boolean mocapPlayer = true;// change to false for kinect
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -53,7 +54,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         player = new MocapPlayer("assets/etc/Test3.serial");
-        //mocap = new Mocap();
+        mocap = new Mocap();
         initGui();
         initMaterials();
         initLightandShadow();
@@ -66,11 +67,15 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        int[][] joints = player.getJoints();
-        //int[][] joints = mocap.getJoints();
+        int[][] joints;
+        if(mocapPlayer){
+            joints = player.getJoints();
+        }else{
+            joints = mocap.getJoints();
+        }
         if (joints != null) {
            
-            player1.setJoints(player.getJoints());
+            player1.setJoints((mocapPlayer)? player.getJoints(): mocap.getJoints() );
             player1.draw();
         }
         
@@ -219,7 +224,7 @@ public class Main extends SimpleApplication {
                 Vector3f.UNIT_X, // DoF Axis of A (x axis)
                 Vector3f.UNIT_X);        // DoF Axis of B (x axis)
         
-        joint.enableMotor(true, 0.01f, 60f);
+        joint.enableMotor(true, 0f, 60f);
         
         bullet.getPhysicsSpace().add(joint);
         bullet.setDebugEnabled(true);
