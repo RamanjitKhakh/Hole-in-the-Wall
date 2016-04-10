@@ -84,20 +84,7 @@ public class Main extends SimpleApplication {
             player1.setJoints((mocapPlayer)? player.getJoints(): mocap.getJoints() );
             player1.draw();
         }
-        
-        
-//        Vector3f current = phyJoint.getPhysicsLocation();
-//        current.z += (4*tpf)/5;
-//        //phyJoint.setPhysicsLocation(current);
-//        wall.activate();
-//        //System.out.println("hinge "+joint.getHingeAngle());
-//        if(joint.getHingeAngle() < -0.60f){
-//            System.out.println("You Lost");
-//        }
-        
-        //heightBoxGeo.setLocalScale(1, player1.height, 1);
-        
-        
+      
     }
 
     // -------------------------------------------------------------------------
@@ -164,33 +151,7 @@ public class Main extends SimpleApplication {
 
     private void initGeometries() {
 				
-        //hole wall	#1	
-        //wallModel = getAssetManager().loadModel("Models/wall2/wall2.j3o");
-
-        //hole wall #3
-        //wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
-
-        //hole wall #4
-//        wallModel = getAssetManager().loadModel("Models/wall4/wall4.j3o");
-//
-//        TangentBinormalGenerator.generate(wallModel);
-//        ayyLmaoNode = new Node();
-//        ayyLmaoNode.attachChild(wallModel);
-//        ayyLmaoNode.setMaterial(gold);
-//        wallModel.setLocalTranslation(0.0f, 0f, -5f);
-//        //ayyLmaoNode.attachChild(wallModel);
-//        ayyLmaoNode.updateModelBound();
-//        rootNode.attachChild(ayyLmaoNode);
-						
-//	//joint sphere
-//        Sphere jointSphere = new Sphere(32, 32, 0.1f);
-//        geomJoint = new Geometry("joint", jointSphere);
-//        geomJoint.setMaterial(gold);
-//        geomJoint.setLocalTranslation(0, 3.5f, -5f);
-//        rootNode.attachChild(geomJoint);
-//        // Materials must be initialized first
-        
-       
+    
       
         // Ground
         Box box = new Box(8f, 2f, 8f);
@@ -242,29 +203,7 @@ public class Main extends SimpleApplication {
         RigidBodyControl ground = new RigidBodyControl(0.0f);
         geomBox.addControl(ground);
         bullet.getPhysicsSpace().add(ground);
-        
-        
-//        wall = new RigidBodyControl(CollisionShapeFactory.createMeshShape(wallModel), 60.0f);
-//        wallModel.addControl(wall);
-//        bullet.getPhysicsSpace().add(wall);
-//        
-        
-//        phyJoint = new RigidBodyControl(0.0f);
-//        geomJoint.addControl(phyJoint);
-//        bullet.getPhysicsSpace().add(phyJoint);
-        
-        // connect small and large sphere by a HingeJoint
-//        joint = new HingeJoint(
-//                phyJoint,
-//                wall,
-//                new Vector3f(0f, 0f, 0), // pivot point local to A
-//                new Vector3f(0f, 3.5f, 0), // pivot point local to B 
-//                Vector3f.UNIT_X, // DoF Axis of A (x axis)
-//                Vector3f.UNIT_X);        // DoF Axis of B (x axis)
-//        
-//        joint.enableMotor(false, 0f, 0f);
-//        
-//        bullet.getPhysicsSpace().add(joint);
+       
         bullet.setDebugEnabled(true);
         
     }
