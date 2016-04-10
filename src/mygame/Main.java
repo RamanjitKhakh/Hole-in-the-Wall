@@ -47,7 +47,7 @@ public class Main extends SimpleApplication {
     BulletAppState bullet;
     RigidBodyControl wall, phyJoint;
     HingeJoint joint;
-    boolean mocapPlayer = false;// change to false for kinect
+    boolean mocapPlayer = true;// change to false for kinect
     
     
     public static void main(String[] args) {
@@ -58,8 +58,11 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        player = new MocapPlayer("assets/etc/Test3.serial");
-        mocap = new Mocap();
+        if(mocapPlayer){
+            player = new MocapPlayer("assets/etc/Test3.serial");
+        }else{
+            mocap = new Mocap();
+        }
         initGui();
         initMaterials();
         initLightandShadow();
