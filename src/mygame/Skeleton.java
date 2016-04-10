@@ -50,6 +50,8 @@ public class Skeleton extends Node {
     Geometry[] bones;
     Geometry head;
     BulletAppState bullet;
+    float height;
+    float scale = 2.0f;
     // the jointIndices define the skeleton, they are pairs of
     // joint indices which are connected by bones
    int[][] jointIndices = {{3, 2}, {2, 1}, {1, 0},
@@ -77,6 +79,29 @@ public class Skeleton extends Node {
             joints[i][1] = (float)j[i][2]*0.0015f;
             joints[i][2] = -(float)j[i][3]*0.0015f;
         }
+        
+        //get skeleton height
+        float dist = 0;
+        Vector3f a = new Vector3f(joints[3][0],joints[3][1],joints[3][2]);
+        Vector3f b = new Vector3f(joints[2][0],joints[2][1],joints[2][2]);
+        dist += a.distance(b);
+        
+        a = new Vector3f(joints[2][0],joints[2][1],joints[2][2]);
+        b = new Vector3f(joints[0][0],joints[0][1],joints[0][2]);
+        dist += a.distance(b);
+        
+        a = new Vector3f(joints[16][0],joints[16][1],joints[16][2]);
+        b = new Vector3f(joints[17][0],joints[17][1],joints[17][2]);
+        dist += a.distance(b);
+        
+        a = new Vector3f(joints[17][0],joints[17][1],joints[17][2]);
+        b = new Vector3f(joints[18][0],joints[18][1],joints[18][2]);
+        dist += a.distance(b);
+        
+        main.stateInfoText.setText("skelHeight: " + dist);
+        height = dist;
+        this.setLocalScale((1.0f/dist)*scale);
+       
     }
 
     public void draw() {

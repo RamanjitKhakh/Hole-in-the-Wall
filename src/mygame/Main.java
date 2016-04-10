@@ -11,6 +11,8 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.joints.HingeJoint;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResults;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -33,8 +35,9 @@ import poormocapplayer.MocapPlayer;
 
 public class Main extends SimpleApplication {
 
+    BitmapText stateInfoText;
     public static Material gold, magenta;
-    Geometry geomSphere, geomBox, geomJoint;
+    Geometry geomSphere, geomBox, geomJoint, heightBoxGeo;
     MocapPlayer player;
     Mocap mocap;
     Node ayyLmaoNode;
@@ -45,6 +48,7 @@ public class Main extends SimpleApplication {
     RigidBodyControl wall, phyJoint;
     HingeJoint joint;
     boolean mocapPlayer = false;// change to false for kinect
+    
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -63,6 +67,7 @@ public class Main extends SimpleApplication {
         initCam();
         initPhysics();
         initSkeletons();
+        initGeometriesPostPhysics();
         
     }
 
@@ -81,14 +86,17 @@ public class Main extends SimpleApplication {
         }
         
         
-        Vector3f current = phyJoint.getPhysicsLocation();
-        current.z += (4*tpf)/5;
-        phyJoint.setPhysicsLocation(current);
-        wall.activate();
-        //System.out.println("hinge "+joint.getHingeAngle());
-        if(joint.getHingeAngle() < -0.60f){
-            System.out.println("You Lost");
-        }
+//        Vector3f current = phyJoint.getPhysicsLocation();
+//        current.z += (4*tpf)/5;
+//        //phyJoint.setPhysicsLocation(current);
+//        wall.activate();
+//        //System.out.println("hinge "+joint.getHingeAngle());
+//        if(joint.getHingeAngle() < -0.60f){
+//            System.out.println("You Lost");
+//        }
+        
+        //heightBoxGeo.setLocalScale(1, player1.height, 1);
+        
         
     }
 
@@ -124,6 +132,15 @@ public class Main extends SimpleApplication {
     private void initGui() {
         setDisplayFps(true);
         setDisplayStatView(false);
+  
+        //create the state info break in the top right
+        BitmapFont bmf = this.getAssetManager().loadFont("Interface/Fonts/ArialBlack.fnt");
+        stateInfoText = new BitmapText(bmf);
+        stateInfoText.setSize(bmf.getCharSet().getRenderedSize() * 1f);
+        stateInfoText.setColor(ColorRGBA.White);
+        stateInfoText.setText("");
+        stateInfoText.setLocalTranslation(10f, this.settings.getHeight() - 10, 0f);
+        this.getGuiNode().attachChild(stateInfoText);
     }
 
     private void initLightandShadow() {
@@ -154,25 +171,27 @@ public class Main extends SimpleApplication {
         //wallModel = getAssetManager().loadModel("Models/wall3/wall3.j3o");
 
         //hole wall #4
-        wallModel = getAssetManager().loadModel("Models/wall4/wall4.j3o");
-
-        TangentBinormalGenerator.generate(wallModel);
-        ayyLmaoNode = new Node();
-        ayyLmaoNode.attachChild(wallModel);
-        ayyLmaoNode.setMaterial(gold);
-        wallModel.setLocalTranslation(0.0f, 0f, -5f);
-        //ayyLmaoNode.attachChild(wallModel);
-        ayyLmaoNode.updateModelBound();
-        rootNode.attachChild(ayyLmaoNode);
+//        wallModel = getAssetManager().loadModel("Models/wall4/wall4.j3o");
+//
+//        TangentBinormalGenerator.generate(wallModel);
+//        ayyLmaoNode = new Node();
+//        ayyLmaoNode.attachChild(wallModel);
+//        ayyLmaoNode.setMaterial(gold);
+//        wallModel.setLocalTranslation(0.0f, 0f, -5f);
+//        //ayyLmaoNode.attachChild(wallModel);
+//        ayyLmaoNode.updateModelBound();
+//        rootNode.attachChild(ayyLmaoNode);
 						
-	//joint sphere
-        Sphere jointSphere = new Sphere(32, 32, 0.1f);
-        geomJoint = new Geometry("joint", jointSphere);
-        geomJoint.setMaterial(gold);
-        geomJoint.setLocalTranslation(0, 3.5f, -5f);
-        rootNode.attachChild(geomJoint);
-        // Materials must be initialized first
+//	//joint sphere
+//        Sphere jointSphere = new Sphere(32, 32, 0.1f);
+//        geomJoint = new Geometry("joint", jointSphere);
+//        geomJoint.setMaterial(gold);
+//        geomJoint.setLocalTranslation(0, 3.5f, -5f);
+//        rootNode.attachChild(geomJoint);
+//        // Materials must be initialized first
         
+       
+      
         // Ground
         Box box = new Box(8f, 2f, 8f);
         geomBox = new Geometry("ground", box);
@@ -183,12 +202,24 @@ public class Main extends SimpleApplication {
         // define shadow behavior
         //geomSphere.setShadowMode(ShadowMode.CastAndReceive);
         geomBox.setShadowMode(ShadowMode.Receive);
+        
+        //skeleton height test box
+        Box heightBox = new Box(1f,1f,1f);
+        heightBoxGeo = new Geometry("heightBox", heightBox);
+        heightBoxGeo.setMaterial(gold);
+        heightBoxGeo.setLocalTranslation(0, 0.9f, 0);
+        //rootNode.attachChild(heightBoxGeo);
+    }
+    
+    public void initGeometriesPostPhysics()
+    {
+       rootNode.attachChild(new Wall(4, this));
     }
 
     private void initCam() {
         flyCam.setEnabled(true);
 	flyCam.setMoveSpeed(10f);
-        cam.setLocation(new Vector3f(0f, 0.1f, 8f));
+        cam.setLocation(new Vector3f(5f, 0.1f, -8f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 				
     }
@@ -213,27 +244,27 @@ public class Main extends SimpleApplication {
         bullet.getPhysicsSpace().add(ground);
         
         
-        wall = new RigidBodyControl(CollisionShapeFactory.createMeshShape(wallModel), 60.0f);
-        wallModel.addControl(wall);
-        bullet.getPhysicsSpace().add(wall);
+//        wall = new RigidBodyControl(CollisionShapeFactory.createMeshShape(wallModel), 60.0f);
+//        wallModel.addControl(wall);
+//        bullet.getPhysicsSpace().add(wall);
+//        
         
-        
-        phyJoint = new RigidBodyControl(0.0f);
-        geomJoint.addControl(phyJoint);
-        bullet.getPhysicsSpace().add(phyJoint);
+//        phyJoint = new RigidBodyControl(0.0f);
+//        geomJoint.addControl(phyJoint);
+//        bullet.getPhysicsSpace().add(phyJoint);
         
         // connect small and large sphere by a HingeJoint
-        joint = new HingeJoint(
-                phyJoint,
-                wall,
-                new Vector3f(0f, 0f, 0), // pivot point local to A
-                new Vector3f(0f, 3.5f, 0), // pivot point local to B 
-                Vector3f.UNIT_X, // DoF Axis of A (x axis)
-                Vector3f.UNIT_X);        // DoF Axis of B (x axis)
-        
-        joint.enableMotor(true, 0f, 120f);
-        
-        bullet.getPhysicsSpace().add(joint);
+//        joint = new HingeJoint(
+//                phyJoint,
+//                wall,
+//                new Vector3f(0f, 0f, 0), // pivot point local to A
+//                new Vector3f(0f, 3.5f, 0), // pivot point local to B 
+//                Vector3f.UNIT_X, // DoF Axis of A (x axis)
+//                Vector3f.UNIT_X);        // DoF Axis of B (x axis)
+//        
+//        joint.enableMotor(false, 0f, 0f);
+//        
+//        bullet.getPhysicsSpace().add(joint);
         bullet.setDebugEnabled(true);
         
     }
