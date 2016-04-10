@@ -44,7 +44,7 @@ public class Main extends SimpleApplication {
     BulletAppState bullet;
     RigidBodyControl wall, phyJoint;
     HingeJoint joint;
-    boolean mocapPlayer = true;// change to false for kinect
+    boolean mocapPlayer = false;// change to false for kinect
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -196,8 +196,8 @@ public class Main extends SimpleApplication {
     private void initSkeletons() {
         
         player1 = new Skeleton(this);
-        player1.rotate(0, 3.14f, 0);
-        player1.setLocalTranslation( -0.2f, -0.7f, 0);
+        player1.rotate(0, 0, 0);
+        player1.setLocalTranslation( -0.2f, -0.7f, 5);
         
         rootNode.attachChild(player1);
     }
