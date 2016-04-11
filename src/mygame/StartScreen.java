@@ -21,7 +21,7 @@ import com.jme3.system.AppSettings;
  */
 public class StartScreen extends AbstractAppState implements ActionListener{
     
-    BitmapText Title;
+    BitmapText Title, prompt;
     Main mainApp;
     StartScreen bt = this;
             
@@ -47,13 +47,25 @@ public class StartScreen extends AbstractAppState implements ActionListener{
         Title.setSize(fnt.getCharSet().getRenderedSize() * 5);
         Title.setColor(ColorRGBA.White);
         Title.setText("HOLE IN THE WALL");
+        
+        prompt = new BitmapText(fnt);
+        prompt.setSize(fnt.getCharSet().getRenderedSize() * 3);
+        prompt.setColor(ColorRGBA.White);
+        prompt.setText("Press Enter to Start");
+        
         int lineY = settings.getHeight()/2;
         int lineX = (int)(settings.getWidth() - Title.getLineWidth() ) / 2;
         
+        
         Title.setLocalTranslation(lineX, lineY, 0);
         
-        ((Main)app).getGuiNode().attachChild(Title);
+        lineY = settings.getHeight()/3;
+        lineX = (int)(settings.getWidth() - prompt.getLineWidth() ) / 2;
         
+        prompt.setLocalTranslation(lineX, lineY, 0);
+        
+        ((Main)app).getGuiNode().attachChild(Title);
+        ((Main)app).getGuiNode().attachChild(prompt);
          mainApp.getInputManager().addMapping("Enter", new KeyTrigger(KeyInput.KEY_RETURN));
          mainApp.getInputManager().addListener(this, new String[]{"Enter"});
         

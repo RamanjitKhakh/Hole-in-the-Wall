@@ -50,6 +50,7 @@ public class Main extends SimpleApplication {
     boolean mocapPlayer = true;// change to false for kinect
     boolean gameOn = false;
     StartScreen s;
+    Wall mainWall;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -113,6 +114,18 @@ public class Main extends SimpleApplication {
         app.setShowSettings(false);
     }
 
+   @Override 
+   public void destroy(){
+       System.out.println("exiting");
+       super.destroy();
+       try{
+           
+           player1.removeFromParent();
+       }catch(Exception e){
+           
+       }
+       
+   }
     private void initMaterials() {
         gold = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         gold.setBoolean("UseMaterialColors", true);
@@ -187,7 +200,8 @@ public class Main extends SimpleApplication {
     
     public void initGeometriesPostPhysics()
     {
-       rootNode.attachChild(new Wall(4, this));
+        mainWall = new Wall(4, this);
+       rootNode.attachChild(mainWall);
     }
 
     public void initCam() {

@@ -7,6 +7,9 @@ package mygame;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.joints.HingeJoint;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
@@ -82,10 +85,12 @@ public class Wall extends Node {
       private float maxVelocity = 3;
       private float acc = 0.07f;
       DecimalFormat df;
+      private Wall wallContext;
       
       public WallControl(Wall w)
       {
         //decimal formatter to make sure our float debugging is on point (lmao)
+        wallContext = w;
         df = new DecimalFormat();
         df.setMaximumFractionDigits(2); 
       }
@@ -101,6 +106,20 @@ public class Wall extends Node {
         //System.out.println("hinge "+joint.getHingeAngle());
         if(joint.getHingeAngle() < -0.60f){
             System.out.println("You Lost");
+            BitmapFont fnt = wallContext.main.getAssetManager().loadFont("Interface/Fonts/ComicSansMS.fnt");
+            BitmapText lostText = new BitmapText(fnt);
+            lostText.setSize(fnt.getCharSet().getRenderedSize() * 5);
+            lostText.setColor(ColorRGBA.White);
+            lostText.setText("YOU LOST!!!");
+            
+            int lineY = main.getSettings().getHeight()/2;
+            int lineX = (int)(main.getSettings().getWidth() - lostText.getLineWidth() ) / 2;
+            
+            lostText.setLocalTranslation(lineX, lineY, 0);
+            
+            main.getGuiNode().attachChild(lostText);
+            wallContext.removeControl(this);
+            
         }
         
         //debugging
