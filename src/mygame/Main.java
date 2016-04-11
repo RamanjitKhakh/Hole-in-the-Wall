@@ -48,7 +48,8 @@ public class Main extends SimpleApplication {
     RigidBodyControl wall, phyJoint;
     HingeJoint joint;
     boolean mocapPlayer = true;// change to false for kinect
-    
+    boolean gameOn = false;
+    StartScreen s;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -56,38 +57,47 @@ public class Main extends SimpleApplication {
         app.start();
     }
 
+    public AppSettings getSettings(){
+        return this.settings;
+    }
+    
     @Override
     public void simpleInitApp() {
-        if(mocapPlayer){
-            player = new MocapPlayer("assets/etc/Test3.serial");
-        }else{
-            mocap = new Mocap();
-        }
-        initGui();
-        initMaterials();
-        initLightandShadow();
-        initGeometries();
-        initCam();
-        initPhysics();
-        initSkeletons();
-        initGeometriesPostPhysics();
+        s = new StartScreen();
+        stateManager.attach(s);
+        
+            if(mocapPlayer){
+                player = new MocapPlayer("assets/etc/Test3.serial");
+            }else{
+                mocap = new Mocap();
+            }
+            initGui();
+            initMaterials();
+            initLightandShadow();
+            initGeometries();
+            initCam();
+            // call these 3 methods to start
+            //initPhysics();
+            //initSkeletons();
+            //initGeometriesPostPhysics();
         
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        int[][] joints;
-        if(mocapPlayer){
-            joints = player.getJoints();
-        }else{
-            joints = mocap.getJoints();
+        if(gameOn){
+            int[][] joints;
+            if(mocapPlayer){
+                joints = player.getJoints();
+            }else{
+                joints = mocap.getJoints();
+            }
+            if (joints != null) {
+
+                player1.setJoints((mocapPlayer)? player.getJoints(): mocap.getJoints() );
+                player1.draw();
+            }
         }
-        if (joints != null) {
-           
-            player1.setJoints((mocapPlayer)? player.getJoints(): mocap.getJoints() );
-            player1.draw();
-        }
-      
     }
 
     // -------------------------------------------------------------------------
@@ -152,7 +162,7 @@ public class Main extends SimpleApplication {
         viewPort.addProcessor(dlsr);
     }
 
-    private void initGeometries() {
+    public void initGeometries() {
 				
     
       
@@ -180,7 +190,7 @@ public class Main extends SimpleApplication {
        rootNode.attachChild(new Wall(4, this));
     }
 
-    private void initCam() {
+    public void initCam() {
         flyCam.setEnabled(true);
 	flyCam.setMoveSpeed(10f);
         cam.setLocation(new Vector3f(5f, 0.1f, -8f));
@@ -188,7 +198,7 @@ public class Main extends SimpleApplication {
 				
     }
 
-    private void initSkeletons() {
+    public void initSkeletons() {
         
         player1 = new Skeleton(this);
         player1.rotate(0, 0, 0);
@@ -197,7 +207,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(player1);
     }
     
-    private void initPhysics(){
+    public void initPhysics(){
         bullet = new BulletAppState();
        
         stateManager.attach(bullet);
