@@ -194,8 +194,8 @@ public class Main extends SimpleApplication {
 
     public void initCam() {
         flyCam.setEnabled(true);
-	flyCam.setMoveSpeed(10f);
-        cam.setLocation(new Vector3f(5f, 0.1f, -8f));
+				flyCam.setMoveSpeed(10f);
+        cam.setLocation(new Vector3f(0f, 2f, 8f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 				
     }

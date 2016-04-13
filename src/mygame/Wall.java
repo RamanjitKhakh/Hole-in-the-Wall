@@ -110,31 +110,6 @@ public class Wall extends Node {
             wallModel.removeControl(wall);
             
             wallContext = new Wall(4,tmp);
-        
-//            
-//            //phyJoint.setPhysicsLocation(new Vector3f(0,5,-5));
-//            main.bullet.getPhysicsSpace().remove(joint);
-//            //joint.enableMotor(true, 0f, 100f);
-//            phyJoint.setPhysicsLocation(new Vector3f(0,3.5f,-5));
-//            wall.setPhysicsLocation(new Vector3f(0,0,-5)); 
-//            
-//            phyJoint.clearForces();
-//            wall.clearForces();
-//            
-//            joint = new HingeJoint(
-//                phyJoint,
-//                wall,
-//                new Vector3f(0f, 0f, 0), // pivot point local to A
-//                new Vector3f(0f, 3.5f, 0), // pivot point local to B 
-//                Vector3f.UNIT_X, // DoF Axis of A (x axis)
-//                Vector3f.UNIT_X);        // DoF Axis of B (x axis)
-//        
-//            joint.enableMotor(true, 0.01f, 10f);
-//            //joint.setLimit(1, 1);
-//            main.bullet.getPhysicsSpace().add(joint);
-//            velocity = 0;
-//            maxVelocity = 3;
-//            acc = 0.09f;
 
         }
         joint.enableMotor(false, 0, 0);
