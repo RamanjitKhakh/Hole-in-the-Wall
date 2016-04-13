@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mygame;
 
 import com.jme3.app.Application;
@@ -15,10 +11,6 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
 import com.jme3.system.AppSettings;
 
-/**
- *
- * @author ramanjit
- */
 public class StartScreen extends AbstractAppState implements ActionListener{
     
     BitmapText Title, prompt;
@@ -32,11 +24,11 @@ public class StartScreen extends AbstractAppState implements ActionListener{
             mainApp.initPhysics();
             mainApp.initSkeletons();
             mainApp.initGeometriesPostPhysics();
-            mainApp.gameOn = true;
-            mainApp.getInputManager().deleteMapping("Enter");
-            mainApp.getInputManager().removeListener(this);
-            
+    
+            Game game = new Game();
+						
             mainApp.getStateManager().detach(this);
+						mainApp.getStateManager().attach(game);
         }
     }
     
@@ -72,10 +64,18 @@ public class StartScreen extends AbstractAppState implements ActionListener{
          mainApp.getInputManager().addListener(this, new String[]{"Enter"});
         
     }
+		
+		@Override
+		public void update(float tpf)
+		{
+				
+		}
     
     @Override
     public void cleanup(){
         mainApp.getGuiNode().detachAllChildren();
+				mainApp.getInputManager().deleteMapping("Enter");
+				mainApp.getInputManager().removeListener(this);
     }
     
 }

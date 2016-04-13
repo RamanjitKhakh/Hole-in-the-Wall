@@ -67,37 +67,27 @@ public class Main extends SimpleApplication {
         s = new StartScreen();
         stateManager.attach(s);
         
-            if(mocapPlayer){
-                player = new MocapPlayer("assets/etc/Test3.serial");
-            }else{
-                mocap = new Mocap();
-            }
-            initGui();
-            initMaterials();
-            initLightandShadow();
-            initGeometries();
-            initCam();
-            // call these 3 methods to start
-            //initPhysics();
-            //initSkeletons();
-            //initGeometriesPostPhysics();
+				if(mocapPlayer){
+						player = new MocapPlayer("assets/etc/Test3.serial");
+				}else{
+						mocap = new Mocap();
+				}
+				initGui();
+				initMaterials();
+				initLightandShadow();
+				initGeometries();
+				initCam();
+				// call these 3 methods to start
+				//initPhysics();
+				//initSkeletons();
+				//initGeometriesPostPhysics();
         
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         if(gameOn){
-            int[][] joints;
-            if(mocapPlayer){
-                joints = player.getJoints();
-            }else{
-                joints = mocap.getJoints();
-            }
-            if (joints != null) {
-
-                player1.setJoints((mocapPlayer)? player.getJoints(): mocap.getJoints() );
-                player1.draw();
-            }
+           
         }
     }
 
@@ -176,9 +166,7 @@ public class Main extends SimpleApplication {
     }
 
     public void initGeometries() {
-				
-    
-      
+   
         // Ground
         Box box = new Box(8f, 2f, 8f);
         geomBox = new Geometry("ground", box);
@@ -200,14 +188,14 @@ public class Main extends SimpleApplication {
     
     public void initGeometriesPostPhysics()
     {
-        mainWall = new Wall(4, this);
-       rootNode.attachChild(mainWall);
+        //mainWall = new Wall(4, this);
+       //rootNode.attachChild(mainWall);
     }
 
     public void initCam() {
         flyCam.setEnabled(true);
-	flyCam.setMoveSpeed(10f);
-        cam.setLocation(new Vector3f(5f, 0.1f, -8f));
+				flyCam.setMoveSpeed(10f);
+        cam.setLocation(new Vector3f(0f, 2f, 8f));
         cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 				
     }
