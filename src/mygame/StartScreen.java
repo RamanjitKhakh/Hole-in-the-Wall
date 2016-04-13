@@ -24,7 +24,7 @@ public class StartScreen extends AbstractAppState implements ActionListener{
             mainApp.initPhysics();
             mainApp.initSkeletons();
             mainApp.initGeometriesPostPhysics();
-            
+    
             Game game = new Game();
 						
             mainApp.getStateManager().detach(this);
@@ -74,6 +74,8 @@ public class StartScreen extends AbstractAppState implements ActionListener{
     @Override
     public void cleanup(){
         mainApp.getGuiNode().detachAllChildren();
+				mainApp.getInputManager().deleteMapping("Enter");
+				mainApp.getInputManager().removeListener(this);
     }
     
 }

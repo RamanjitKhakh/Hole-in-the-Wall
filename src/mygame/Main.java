@@ -87,17 +87,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         if(gameOn){
-            int[][] joints;
-            if(mocapPlayer){
-                joints = player.getJoints();
-            }else{
-                joints = mocap.getJoints();
-            }
-            if (joints != null) {
-
-                player1.setJoints((mocapPlayer)? player.getJoints(): mocap.getJoints() );
-                player1.draw();
-            }
+           
         }
     }
 
