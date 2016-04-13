@@ -98,7 +98,7 @@ public class Wall extends Node {
       
       @Override
       protected void controlUpdate(float tpf) {
-        Vector3f current = phyJoint.getPhysicsLocation();
+        Vector3f current = wallContext.phyJoint.getPhysicsLocation();
         if(velocity < maxVelocity)
           velocity += acc*tpf;
         current.z += velocity*tpf;
@@ -106,10 +106,19 @@ public class Wall extends Node {
         if(current.z > 10){
             Main tmp = wallContext.main;
             wallContext.removeControl(this);
-            wallContext.removeFromParent();
+            tmp.bullet.getPhysicsSpace().remove(wallContext.joint);
+            tmp.bullet.getPhysicsSpace().remove(wallContext.phyJoint);
+            tmp.bullet.getPhysicsSpace().remove(wallContext.geomJoint);
+            tmp.getRootNode().detachChild(wallContext.wallModel);
+            tmp.getRootNode().detachChild(wallContext.wallNode);
+            tmp.getRootNode().detachChild(wallContext.geomJoint);
+            tmp.getRootNode().detachChild(wallContext);
+
+            
             wallModel.removeControl(wall);
             
             wallContext = new Wall(4,tmp);
+            wallContext.addControl(this);
         
 //            
 //            //phyJoint.setPhysicsLocation(new Vector3f(0,5,-5));
