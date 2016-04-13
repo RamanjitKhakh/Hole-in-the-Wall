@@ -67,20 +67,20 @@ public class Main extends SimpleApplication {
         s = new StartScreen();
         stateManager.attach(s);
         
-            if(mocapPlayer){
-                player = new MocapPlayer("assets/etc/Test3.serial");
-            }else{
-                mocap = new Mocap();
-            }
-            initGui();
-            initMaterials();
-            initLightandShadow();
-            initGeometries();
-            initCam();
-            // call these 3 methods to start
-            //initPhysics();
-            //initSkeletons();
-            //initGeometriesPostPhysics();
+				if(mocapPlayer){
+						player = new MocapPlayer("assets/etc/Test3.serial");
+				}else{
+						mocap = new Mocap();
+				}
+				initGui();
+				initMaterials();
+				initLightandShadow();
+				initGeometries();
+				initCam();
+				// call these 3 methods to start
+				//initPhysics();
+				//initSkeletons();
+				//initGeometriesPostPhysics();
         
     }
 
@@ -176,9 +176,7 @@ public class Main extends SimpleApplication {
     }
 
     public void initGeometries() {
-				
-    
-      
+   
         // Ground
         Box box = new Box(8f, 2f, 8f);
         geomBox = new Geometry("ground", box);
@@ -200,8 +198,8 @@ public class Main extends SimpleApplication {
     
     public void initGeometriesPostPhysics()
     {
-        mainWall = new Wall(4, this);
-       rootNode.attachChild(mainWall);
+        //mainWall = new Wall(4, this);
+       //rootNode.attachChild(mainWall);
     }
 
     public void initCam() {
