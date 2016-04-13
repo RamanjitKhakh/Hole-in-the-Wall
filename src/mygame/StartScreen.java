@@ -33,6 +33,8 @@ public class StartScreen extends AbstractAppState implements ActionListener{
             mainApp.initSkeletons();
             mainApp.initGeometriesPostPhysics();
             mainApp.gameOn = true;
+            mainApp.getInputManager().deleteMapping("Enter");
+            mainApp.getInputManager().removeListener(this);
             
             mainApp.getStateManager().detach(this);
         }

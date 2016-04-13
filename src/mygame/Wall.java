@@ -11,6 +11,7 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -83,7 +84,7 @@ public class Wall extends Node {
       //the wall begins accelerating from rest until it reaches a max velocity
       private float velocity = 0;
       private float maxVelocity = 3;
-      private float acc = 0.07f;
+      private float acc = 0.09f;
       DecimalFormat df;
       private Wall wallContext;
       
@@ -102,10 +103,46 @@ public class Wall extends Node {
           velocity += acc*tpf;
         current.z += velocity*tpf;
         phyJoint.setPhysicsLocation(current);
+        if(current.z > 10){
+            Main tmp = wallContext.main;
+            wallContext.removeControl(this);
+            wallContext.removeFromParent();
+            wallModel.removeControl(wall);
+            
+            wallContext = new Wall(4,tmp);
+        
+//            
+//            //phyJoint.setPhysicsLocation(new Vector3f(0,5,-5));
+//            main.bullet.getPhysicsSpace().remove(joint);
+//            //joint.enableMotor(true, 0f, 100f);
+//            phyJoint.setPhysicsLocation(new Vector3f(0,3.5f,-5));
+//            wall.setPhysicsLocation(new Vector3f(0,0,-5)); 
+//            
+//            phyJoint.clearForces();
+//            wall.clearForces();
+//            
+//            joint = new HingeJoint(
+//                phyJoint,
+//                wall,
+//                new Vector3f(0f, 0f, 0), // pivot point local to A
+//                new Vector3f(0f, 3.5f, 0), // pivot point local to B 
+//                Vector3f.UNIT_X, // DoF Axis of A (x axis)
+//                Vector3f.UNIT_X);        // DoF Axis of B (x axis)
+//        
+//            joint.enableMotor(true, 0.01f, 10f);
+//            //joint.setLimit(1, 1);
+//            main.bullet.getPhysicsSpace().add(joint);
+//            velocity = 0;
+//            maxVelocity = 3;
+//            acc = 0.09f;
+
+        }
+        joint.enableMotor(false, 0, 0);
         wall.activate();
-        //System.out.println("hinge "+joint.getHingeAngle());
+        
+        
         if(joint.getHingeAngle() < -0.60f){
-            System.out.println("You Lost");
+            //System.out.println("You Lost");
             BitmapFont fnt = wallContext.main.getAssetManager().loadFont("Interface/Fonts/ComicSansMS.fnt");
             BitmapText lostText = new BitmapText(fnt);
             lostText.setSize(fnt.getCharSet().getRenderedSize() * 5);
@@ -118,7 +155,7 @@ public class Wall extends Node {
             lostText.setLocalTranslation(lineX, lineY, 0);
             
             main.getGuiNode().attachChild(lostText);
-            wallContext.removeControl(this);
+            //wallContext.removeControl(this);
             
         }
         
