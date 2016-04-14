@@ -203,8 +203,8 @@ public class Main extends SimpleApplication {
     public void initSkeletons() {
         
         player1 = new Skeleton(this);
-        player1.rotate(0, 0, 0);
-        player1.setLocalTranslation( -0.2f, -0.7f, 5);
+        player1.rotate(0, 3.14f, 0);
+        player1.setLocalTranslation( 0.2f, -0.7f, 0);
         
         rootNode.attachChild(player1);
     }
