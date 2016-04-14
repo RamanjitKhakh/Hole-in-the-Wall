@@ -102,13 +102,15 @@ public class Wall extends Node {
         if(velocity < maxVelocity)
           velocity += acc*tpf;
         current.z += velocity*tpf;
-        phyJoint.setPhysicsLocation(current);
+        wallContext.phyJoint.setPhysicsLocation(current);
+        
         if(current.z > 10){
             Main tmp = wallContext.main;
             wallContext.removeControl(this);
             tmp.bullet.getPhysicsSpace().remove(wallContext.joint);
             tmp.bullet.getPhysicsSpace().remove(wallContext.phyJoint);
             tmp.bullet.getPhysicsSpace().remove(wallContext.geomJoint);
+            tmp.bullet.getPhysicsSpace().remove(wallContext.wall);
             tmp.getRootNode().detachChild(wallContext.wallModel);
             tmp.getRootNode().detachChild(wallContext.wallNode);
             tmp.getRootNode().detachChild(wallContext.geomJoint);
@@ -117,8 +119,9 @@ public class Wall extends Node {
             
             wallModel.removeControl(wall);
             
-            wallContext = new Wall(4,tmp);
-
+            main.mainWall = new Wall(4,tmp);
+            main.getRootNode().attachChild(main.mainWall);
+            
         }
         joint.enableMotor(false, 0, 0);
         wall.activate();
