@@ -118,9 +118,13 @@ public class Wall extends Node {
 
             
             wallModel.removeControl(wall);
-            
-            main.mainWall = new Wall(4,tmp);
-            main.getRootNode().attachChild(main.mainWall);
+            if(main.level < 6){
+                main.level++;
+                main.mainWall = new Wall(main.level,tmp);
+                main.getRootNode().attachChild(main.mainWall);
+            }else{
+                main.getStateManager().attach(new EndScreen());
+            }
             
         }
         joint.enableMotor(false, 0, 0);

@@ -51,6 +51,7 @@ public class Main extends SimpleApplication {
     boolean gameOn = false;
     StartScreen s;
     Wall mainWall;
+    int level = 2;
     
     public static void main(String[] args) {
         Main app = new Main();

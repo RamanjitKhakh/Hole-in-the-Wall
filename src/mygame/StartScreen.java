@@ -9,7 +9,12 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
+import com.jme3.scene.control.AbstractControl;
 import com.jme3.system.AppSettings;
+import java.text.DecimalFormat;
 
 public class StartScreen extends AbstractAppState implements ActionListener{
     
@@ -62,13 +67,13 @@ public class StartScreen extends AbstractAppState implements ActionListener{
         ((Main)app).getGuiNode().attachChild(prompt);
          mainApp.getInputManager().addMapping("Enter", new KeyTrigger(KeyInput.KEY_RETURN));
          mainApp.getInputManager().addListener(this, new String[]{"Enter"});
-        
+         
     }
 		
 		@Override
 		public void update(float tpf)
 		{
-				
+                    
 		}
     
     @Override
@@ -77,5 +82,32 @@ public class StartScreen extends AbstractAppState implements ActionListener{
 				mainApp.getInputManager().deleteMapping("Enter");
 				mainApp.getInputManager().removeListener(this);
     }
+    
+//    
+//    
+//    public class StartControl extends AbstractControl{
+//      Main mainApp;
+//      
+//      public StartControl(Main m)
+//      {
+//         this.mainApp = m;
+//         
+//                 
+//      }
+//
+//      @Override
+//      protected void controlUpdate(float tpf) {
+//        mainApp.getFlyByCamera().setMoveSpeed(tpf);
+//      }
+//
+//      @Override
+//      protected void controlRender(RenderManager rm, ViewPort vp) {
+//       
+//      }
+//  
+//  }
+//    
+//    
+    
     
 }

@@ -14,7 +14,7 @@ public class Game extends AbstractAppState implements ActionListener {
 		public void initialize(AppStateManager stateManager, Application app)
 		{
 			 this.main = (Main)app;
-			 main.mainWall = new Wall(4, main);
+			 main.mainWall = new Wall(main.level, main);
                          main.getRootNode().attachChild(main.mainWall);
 		}
 		
