@@ -40,7 +40,7 @@ public class Wall extends Node {
         //wall model
 				if( i == 0 )
 				{
-						wallModel = main.getAssetManager().loadModel("Models/template/template2.j3o");
+						wallModel = main.getAssetManager().loadModel("Models/template5/template5.j3o");
 				}else{
 						
 				}
