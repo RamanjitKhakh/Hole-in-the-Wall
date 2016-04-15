@@ -38,16 +38,24 @@ public class Wall extends Node {
         this.main = main;
         
         //wall model
-        wallModel = main.getAssetManager().loadModel("Models/wall" + i + "/wall" + i + ".j3o");
+				if( i == 0 )
+				{
+						wallModel = main.getAssetManager().loadModel("Models/template/template2.j3o");
+				}else{
+						
+				}
+        
+				wallModel.setLocalScale(2.2f);
         TangentBinormalGenerator.generate(wallModel);
         wallNode = new Node();
         wallNode.attachChild(wallModel);
         wallNode.setMaterial(gold);
-        wallModel.setLocalTranslation(0.0f, 0f, -5f);
-        //wallNode.attachChild(wallModel);
+        wallModel.setLocalTranslation(0.0f, 0.0f, -5f);
+
         wallNode.updateModelBound();
         this.addControl(new WallControl(this));
         main.getRootNode().attachChild(wallNode);
+				
         
         //joint sphere
         Sphere jointSphere = new Sphere(32, 32, 0.1f);
@@ -102,6 +110,7 @@ public class Wall extends Node {
         if(velocity < maxVelocity)
           velocity += acc*tpf;
         current.z += velocity*tpf;
+				current.y = 3.2f;
         wallContext.phyJoint.setPhysicsLocation(current);
         
         if(current.z > 10){
