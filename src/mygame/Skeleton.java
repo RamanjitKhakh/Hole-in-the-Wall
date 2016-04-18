@@ -50,8 +50,11 @@ public class Skeleton extends Node {
     Geometry[] bones;
     Geometry head;
     BulletAppState bullet;
-    float height;
+    float height, RFootY, LFootY, avgFootHeight;
+    float verticalOffset = -1.5f;
     float scale = 2.0f;
+    float sum = 0;
+    int n = 0;
     // the jointIndices define the skeleton, they are pairs of
     // joint indices which are connected by bones
    int[][] jointIndices = {{3, 2}, {2, 1}, {1, 0},
@@ -98,10 +101,39 @@ public class Skeleton extends Node {
         b = new Vector3f(joints[18][0],joints[18][1],joints[18][2]);
         dist += a.distance(b);
         
-        main.stateInfoText.setText("skelHeight: " + dist);
+        //get foot heights 
+        LFootY = joints[15][1];
+        RFootY = joints[19][1];
+        
+        n++;
+        //pick the lowest foot and update the average foot height
+        if(LFootY < RFootY)
+        {
+          sum += LFootY;
+          avgFootHeight = sum/n;
+        }else{
+          sum += RFootY;
+          avgFootHeight = sum/n;
+        }
+        
+        //scale the skeleton based on skeletonheight
         height = dist;
         this.setLocalScale((1.0f/dist)*scale);
-       
+ 
+        main.stateInfoText.setText("skelHeight: " + dist 
+                +"\nLFootY: " + LFootY 
+                +"\nRFootY: " + RFootY
+                +"\navgFootHeight: " + avgFootHeight
+                +"\nFrustrum bot: " + main.getCamera().getFrustumBottom()
+                +"\nFrustrum far: " + main.getCamera().getFrustumFar()
+                +"\nFrustrum left: " + main.getCamera().getFrustumLeft()
+                +"\nFrustrum right: " + main.getCamera().getFrustumRight()
+                +"\nFrustrum near: " + main.getCamera().getFrustumNear()
+                +"\nFrustrum top: " + main.getCamera().getFrustumTop()
+                +"\ncam pos: " + main.getCamera().getLocation());
+        this.setLocalTranslation(0, -avgFootHeight + verticalOffset, 0);
+        
+        
     }
 
     public void draw() {
