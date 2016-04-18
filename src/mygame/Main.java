@@ -17,6 +17,7 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
@@ -37,7 +38,7 @@ public class Main extends SimpleApplication {
 
   BitmapText stateInfoText;
   public static Material gold, magenta;
-  Geometry geomSphere, geomBox, geomJoint, heightBoxGeo;
+  Geometry geomSphere, geomBox, geomJoint, heightBoxGeo, curtain1, curtain2;
   MocapPlayer player;
   Mocap mocap;
   Node ayyLmaoNode;
@@ -47,7 +48,7 @@ public class Main extends SimpleApplication {
   BulletAppState bullet;
   RigidBodyControl wall, phyJoint;
   HingeJoint joint;
-  boolean mocapPlayer = false;// change to false for kinect
+  boolean mocapPlayer = true;// change to false for kinect
   boolean gameOn = false;
   StartScreen s;
   Wall mainWall;
@@ -183,7 +184,18 @@ public class Main extends SimpleApplication {
     heightBoxGeo = new Geometry("heightBox", heightBox);
     heightBoxGeo.setMaterial(gold);
     heightBoxGeo.setLocalTranslation(0, 0.9f, 0);
-    //rootNode.attachChild(heightBoxGeo);
+    
+    curtain1 = new Geometry("curtain", new Box(2.5f, 2.5f, 0.1f));
+    curtain1.setMaterial(magenta);
+    curtain1.setLocalTranslation(2.5f, 0, -4.5f);
+    rootNode.attachChild(curtain1);
+    
+    
+    curtain2 = new Geometry("curtain", new Box(2.5f, 2.5f, 0.1f));
+    curtain2.setMaterial(magenta);
+    curtain2.setLocalTranslation(-2.5f, 0, -4.5f);
+    rootNode.attachChild(curtain2);
+    
   }
 
   public void initGeometriesPostPhysics() {

@@ -32,15 +32,16 @@ public class Wall extends Node {
   Geometry geomJoint;
   RigidBodyControl wall, phyJoint;
   HingeJoint joint;
-  private float WALL_SCALE = 2.4f;
+  private float WALL_SCALE = 2.5f;
   private float WALL_Y_OFFSET = 3.5f;
 
   public Wall(int i, Main main) {
     this.main = main;
-
+    main.curtain1.setLocalTranslation(2.5f, 0, -4.5f);
+    main.curtain2.setLocalTranslation(-2.5f, 0, -4.5f);
     //wall model
     if (i == 0) {
-      wallModel = main.getAssetManager().loadModel("Models/template8/template8.j3o");
+      wallModel = main.getAssetManager().loadModel("Models/template6/template6.j3o");
     } else {
     }
 
@@ -104,14 +105,25 @@ public class Wall extends Node {
 
     @Override
     protected void controlUpdate(float tpf) {
-      Vector3f current = wallContext.phyJoint.getPhysicsLocation();
+      Vector3f current;
+      
+      current = wallContext.main.curtain1.getLocalTranslation();
+      if(current.x < 5)
+        wallContext.main.curtain1.setLocalTranslation(current.x += tpf, 0, current.z);
+      
+      current = wallContext.main.curtain2.getLocalTranslation();
+      if(current.x > -5)
+        wallContext.main.curtain2.setLocalTranslation(current.x -= tpf, 0, current.z);
+      
+      
+      current = wallContext.phyJoint.getPhysicsLocation();
       if (velocity < maxVelocity) {
         velocity += acc * tpf;
       }
       current.z += velocity * tpf;
       current.y = WALL_Y_OFFSET;
       wallContext.phyJoint.setPhysicsLocation(current);
-
+      
       if (current.z > 10) {
         Main tmp = wallContext.main;
         wallContext.removeControl(this);
