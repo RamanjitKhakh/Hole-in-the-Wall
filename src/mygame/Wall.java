@@ -41,7 +41,7 @@ public class Wall extends Node {
     main.curtain2.setLocalTranslation(-2.5f, 0, -4.5f);
     //wall model
     if (i == 0) {
-      wallModel = main.getAssetManager().loadModel("Models/template6/template6.j3o");
+      wallModel = main.getAssetManager().loadModel("Models/Wall10/Wall10.j3o");
     } else {
     }
 

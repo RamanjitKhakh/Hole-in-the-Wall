@@ -16,10 +16,14 @@ import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -37,7 +41,7 @@ import poormocapplayer.MocapPlayer;
 public class Main extends SimpleApplication {
 
   BitmapText stateInfoText;
-  public static Material gold, magenta;
+  public static Material gold, magenta, goldFade;
   Geometry geomSphere, geomBox, geomJoint, heightBoxGeo, curtain1, curtain2;
   MocapPlayer player;
   Mocap mocap;
@@ -124,7 +128,17 @@ public class Main extends SimpleApplication {
     gold.setColor("Diffuse", ColorRGBA.Green);
     gold.setColor("Specular", ColorRGBA.Gray);
     gold.setFloat("Shininess", 4f); // shininess from 1-128
-
+    
+    goldFade = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+    goldFade.setTransparent(true);
+    goldFade.setBoolean("UseMaterialColors", true);
+    goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, 0.5f));
+    goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, 0.5f));
+    goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, 0.5f));
+    goldFade.setFloat("Shininess", 4f); // shininess from 1-128
+    goldFade.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+    
+    
     magenta = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
     magenta.setBoolean("UseMaterialColors", true);
     magenta.setColor("Ambient", ColorRGBA.Gray);
@@ -187,6 +201,7 @@ public class Main extends SimpleApplication {
     
     curtain1 = new Geometry("curtain", new Box(2.5f, 2.5f, 0.1f));
     curtain1.setMaterial(magenta);
+    curtain1.setQueueBucket(Bucket.Transparent);
     curtain1.setLocalTranslation(2.5f, 0, -4.5f);
     rootNode.attachChild(curtain1);
     
