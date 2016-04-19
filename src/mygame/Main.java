@@ -57,7 +57,9 @@ public class Main extends SimpleApplication {
   StartScreen s;
   Wall mainWall;
   int level = 0;
-
+  float fadeOut = 1;
+  ColorRGBA ambient, diffused, specular;
+  
   public static void main(String[] args) {
     Main app = new Main();
     initAppScreen(app);
@@ -129,12 +131,16 @@ public class Main extends SimpleApplication {
     gold.setColor("Specular", ColorRGBA.Gray);
     gold.setFloat("Shininess", 4f); // shininess from 1-128
     
+    ambient = new ColorRGBA(255, 0, 0, fadeOut);
+    diffused = new ColorRGBA(0, 255, 0, fadeOut);
+    specular = new ColorRGBA(100, 100, 100, fadeOut);
+    
     goldFade = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-    goldFade.setTransparent(true);
+    //goldFade.setTransparent(true);
     goldFade.setBoolean("UseMaterialColors", true);
-    goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, 0.5f));
-    goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, 0.5f));
-    goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, 0.5f));
+    goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, fadeOut));
+    goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, fadeOut));
+    goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, fadeOut));
     goldFade.setFloat("Shininess", 4f); // shininess from 1-128
     goldFade.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
     
