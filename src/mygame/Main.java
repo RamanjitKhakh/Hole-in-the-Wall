@@ -245,7 +245,7 @@ public class Main extends SimpleApplication {
     bullet = new BulletAppState();
 
     stateManager.attach(bullet);
-    bullet.setDebugEnabled(true);
+    //bullet.setDebugEnabled(true);
 
     RigidBodyControl ground = new RigidBodyControl(0.0f);
     geomBox.addControl(ground);
