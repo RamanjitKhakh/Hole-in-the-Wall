@@ -48,7 +48,7 @@ public class Wall extends Node {
     main.curtain2.setLocalTranslation(-2.5f, 0, -4.5f);
     //wall model
     if (i == 0) {
-      wallModel = main.getAssetManager().loadModel("Models/Wall11/Wall11.j3o");
+      wallModel = main.getAssetManager().loadModel("Models/Wall8/Wall8.j3o");
     } else {
         
 				wallModel.setLocalScale(2.2f);
