@@ -31,7 +31,8 @@ public class StartScreen extends AbstractAppState implements ActionListener {
       mainApp.initGeometriesPostPhysics();
 
       Game game = new Game();
-
+      mainApp.gameShowAudio.stop();
+      mainApp.getRootNode().detachChild(mainApp.gameShowAudio);
       mainApp.getStateManager().detach(this);
       mainApp.getStateManager().attach(game);
     }
@@ -67,7 +68,9 @@ public class StartScreen extends AbstractAppState implements ActionListener {
     ((Main) app).getGuiNode().attachChild(prompt);
     mainApp.getInputManager().addMapping("Enter", new KeyTrigger(KeyInput.KEY_RETURN));
     mainApp.getInputManager().addListener(this, new String[]{"Enter"});
-
+    
+    
+    mainApp.gameShowAudio.play();
   }
 
   @Override

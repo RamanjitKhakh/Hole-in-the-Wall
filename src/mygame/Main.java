@@ -6,6 +6,7 @@ package mygame;
  * initMaterials(); initLightandShadow(); initGeometries(); initCam();
  */
 import com.jme3.app.SimpleApplication;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.joints.HingeJoint;
@@ -52,14 +53,15 @@ public class Main extends SimpleApplication {
   BulletAppState bullet;
   RigidBodyControl wall, phyJoint;
   HingeJoint joint;
-  boolean mocapPlayer = false;// change to false for kinect
+  boolean mocapPlayer = true;// change to false for kinect
   boolean gameOn = false;
   StartScreen s;
   Wall mainWall;
   int level = 0;
   float fadeOut = 1;
   ColorRGBA ambient, diffused, specular;
-  
+  AudioNode gameShowAudio;
+          
   public static void main(String[] args) {
     Main app = new Main();
     initAppScreen(app);
@@ -85,6 +87,7 @@ public class Main extends SimpleApplication {
     initLightandShadow();
     initGeometries();
     initCam();
+    initAudio();
     // call these 3 methods to start
     //initPhysics();
     //initSkeletons();
@@ -101,6 +104,15 @@ public class Main extends SimpleApplication {
   // -------------------------------------------------------------------------
   // Initialization Methods
   // -------------------------------------------------------------------------
+  public void initAudio(){
+      gameShowAudio = new AudioNode(assetManager, "Sounds/gameShow.wav", false);
+      gameShowAudio.setPositional(false);
+      gameShowAudio.setLooping(false);
+      gameShowAudio.setVolume(1);
+      rootNode.attachChild(gameShowAudio);
+      
+  }
+  
   private static void initAppScreen(SimpleApplication app) {
     AppSettings aps = new AppSettings(true);
     Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
