@@ -52,7 +52,7 @@ public class Main extends SimpleApplication {
   BulletAppState bullet;
   RigidBodyControl wall, phyJoint;
   HingeJoint joint;
-  boolean mocapPlayer = true;// change to false for kinect
+  boolean mocapPlayer = false;// change to false for kinect
   boolean gameOn = false;
   StartScreen s;
   Wall mainWall;
