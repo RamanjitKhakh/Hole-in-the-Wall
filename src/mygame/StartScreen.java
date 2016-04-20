@@ -35,6 +35,7 @@ public class StartScreen extends AbstractAppState implements ActionListener {
       mainApp.getRootNode().detachChild(mainApp.gameShowAudio);
       mainApp.getStateManager().detach(this);
       mainApp.getStateManager().attach(game);
+      mainApp.Cheer.play();
     }
   }
 
