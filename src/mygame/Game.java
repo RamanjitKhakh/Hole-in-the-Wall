@@ -47,6 +47,7 @@ public class Game extends AbstractAppState implements ActionListener {
     cam.setLocation(new Vector3f(0.0f, 0.06f, 25.448f));
     cam.lookAt(new Vector3f(0, 0.76f, -5), Vector3f.UNIT_Y);
     cam.update();
+    
 	}
   
   public void initGUI()

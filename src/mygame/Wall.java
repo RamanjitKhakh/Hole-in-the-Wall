@@ -7,11 +7,7 @@ package mygame;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.joints.HingeJoint;
 import com.jme3.bullet.util.CollisionShapeFactory;
-import com.jme3.font.BitmapFont;
-import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -115,20 +111,24 @@ public class Wall extends Node {
 
 				@Override
 				protected void controlUpdate(float tpf) {
-						Vector3f current;
+						Vector3f current, curtainPos;
+                                                current = wallContext.phyJoint.getPhysicsLocation();
+						curtainPos = wallContext.main.curtain1.getLocalTranslation();
+						if ((curtainPos.x < 5) && (current.z < -4) ) {
+								wallContext.main.curtain1.setLocalTranslation(curtainPos.x += tpf, 0, curtainPos.z);
+						}else if( (current.z > -4) && (curtainPos.x > 2.5)){
+                                                                wallContext.main.curtain1.setLocalTranslation(curtainPos.x -= tpf, 0, curtainPos.z);
+                                                }
 
-						current = wallContext.main.curtain1.getLocalTranslation();
-						if (current.x < 5) {
-								wallContext.main.curtain1.setLocalTranslation(current.x += tpf, 0, current.z);
-						}
-
-						current = wallContext.main.curtain2.getLocalTranslation();
-						if (current.x > -5) {
-								wallContext.main.curtain2.setLocalTranslation(current.x -= tpf, 0, current.z);
-						}
+						curtainPos = wallContext.main.curtain2.getLocalTranslation();
+						if ( (curtainPos.x > -5) && (current.z < -4)) {
+								wallContext.main.curtain2.setLocalTranslation(curtainPos.x -= tpf, 0, curtainPos.z);
+						}else if ((current.z > -4) && (curtainPos.x < -2.5)){
+                                                                wallContext.main.curtain2.setLocalTranslation(curtainPos.x += tpf, 0, curtainPos.z);
+                                                }
 
 
-						current = wallContext.phyJoint.getPhysicsLocation();
+						//current = wallContext.phyJoint.getPhysicsLocation();
 						if (velocity < maxVelocity) {
 								velocity += acc * tpf;
 						}
