@@ -160,7 +160,7 @@ public class Wall extends Node {
 
 						}
 						joint.enableMotor(false, 0, 0);
-
+                                                wall.activate();
 				}
 
 				@Override
