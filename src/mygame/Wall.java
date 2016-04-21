@@ -143,7 +143,7 @@ public class Wall extends Node {
 								main.goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, main.fadeOut));
 						}
 
-						if (current.z > 11) {
+						if (current.z > 10) {
 								Main tmp = wallContext.main;
 								wallContext.removeControl(this);
 								tmp.bullet.getPhysicsSpace().remove(wallContext.joint);
