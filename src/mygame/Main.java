@@ -32,6 +32,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.system.AppSettings;
+import com.jme3.ui.Picture;
 import com.jme3.util.TangentBinormalGenerator;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -48,6 +49,8 @@ public class Main extends SimpleApplication {
   Node ayyLmaoNode;
   Skeleton[] skeletons;
   Skeleton player1;
+	Picture[] numberPics;
+	Picture slashPic;
   Spatial wallModel;
   BulletAppState bullet;
   RigidBodyControl wall, phyJoint;
@@ -159,6 +162,23 @@ public class Main extends SimpleApplication {
     stateInfoText.setText("");
     stateInfoText.setLocalTranslation(10f, this.settings.getHeight() - 10, 0f);
     this.getGuiNode().attachChild(stateInfoText);
+		
+		//create and array of picture objects for the numbers
+		numberPics = new Picture[10];
+		
+		//load up the picture of a slash for the wall number display
+		slashPic = new Picture("slashPic");
+		slashPic.setImage(assetManager, "Textures/UI/numbers/slash.png", true);
+		slashPic.setWidth(100);
+		slashPic.setHeight(100);
+				
+		for(int i=0; i < 10 ; i++)
+		{
+			numberPics[i] = new Picture("numberPic" + i);
+			numberPics[i].setImage(assetManager, "Textures/UI/numbers/" + i +".png",true);
+			numberPics[i].setHeight(100);
+			numberPics[i].setWidth(100);
+		}
   }
 
   private void initLightandShadow() {
@@ -221,7 +241,7 @@ public class Main extends SimpleApplication {
   public void initCam() {
     flyCam.setEnabled(true);
     flyCam.setMoveSpeed(10f);
-    cam.setLocation(new Vector3f(0f, 2f, 8f));
+    cam.setLocation(new Vector3f(0f, 1f, 8f));
     cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
   }
@@ -239,13 +259,13 @@ public class Main extends SimpleApplication {
     bullet = new BulletAppState();
 
     stateManager.attach(bullet);
-    bullet.setDebugEnabled(true);
+    //bullet.setDebugEnabled(true);
 
     RigidBodyControl ground = new RigidBodyControl(0.0f);
     geomBox.addControl(ground);
     bullet.getPhysicsSpace().add(ground);
 
-    bullet.setDebugEnabled(true);
+   
 
   }
 }

@@ -14,11 +14,13 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.system.AppSettings;
+import com.jme3.ui.Picture;
 import java.text.DecimalFormat;
 
 public class StartScreen extends AbstractAppState implements ActionListener {
 
   BitmapText Title, prompt;
+	private Picture logoPic;
   Main mainApp;
   StartScreen bt = this;
 
@@ -41,30 +43,35 @@ public class StartScreen extends AbstractAppState implements ActionListener {
   public void initialize(AppStateManager stateManager, Application app) {
     mainApp = (Main) app;
     AppSettings settings = ((Main) app).getSettings();
-    BitmapFont fnt = app.getAssetManager().loadFont("Interface/Fonts/ComicSansMS.fnt");
-    Title = new BitmapText(fnt);
-    Title.setSize(fnt.getCharSet().getRenderedSize() * 5);
-    Title.setColor(ColorRGBA.White);
-    Title.setText("HOLE IN THE WALL");
+		
+    //create and attach logo
+		logoPic = new Picture("startScreenLogo");
+		logoPic.setImage(app.getAssetManager(), "Textures/UI/startScreenLogo.png", true);
+		logoPic.setWidth(mainApp.getSettings().getWidth()*.4f);
+		logoPic.setHeight(mainApp.getSettings().getHeight()*.4f);
+		logoPic.setPosition(
+				mainApp.getSettings().getWidth()*.3f, 
+				mainApp.getSettings().getHeight()*.3f);
+		mainApp.getGuiNode().attachChild(logoPic);
 
-    prompt = new BitmapText(fnt);
-    prompt.setSize(fnt.getCharSet().getRenderedSize() * 3);
-    prompt.setColor(ColorRGBA.White);
-    prompt.setText("Press Enter to Start");
+//    prompt = new BitmapText(fnt);
+//    prompt.setSize(fnt.getCharSet().getRenderedSize() * 3);
+//    prompt.setColor(ColorRGBA.White);
+//    prompt.setText("Press Enter to Start");
 
-    int lineY = settings.getHeight() / 2;
-    int lineX = (int) (settings.getWidth() - Title.getLineWidth()) / 2;
-
-
-    Title.setLocalTranslation(lineX, lineY, 0);
-
-    lineY = settings.getHeight() / 3;
-    lineX = (int) (settings.getWidth() - prompt.getLineWidth()) / 2;
-
-    prompt.setLocalTranslation(lineX, lineY, 0);
-
-    ((Main) app).getGuiNode().attachChild(Title);
-    ((Main) app).getGuiNode().attachChild(prompt);
+//    int lineY = settings.getHeight() / 2;
+//    int lineX = (int) (settings.getWidth() - Title.getLineWidth()) / 2;
+//
+//
+//    Title.setLocalTranslation(lineX, lineY, 0);
+//
+//    lineY = settings.getHeight() / 3;
+//    lineX = (int) (settings.getWidth() - prompt.getLineWidth()) / 2;
+//
+//    prompt.setLocalTranslation(lineX, lineY, 0);
+//
+//    ((Main) app).getGuiNode().attachChild(Title);
+//    ((Main) app).getGuiNode().attachChild(prompt);
     mainApp.getInputManager().addMapping("Enter", new KeyTrigger(KeyInput.KEY_RETURN));
     mainApp.getInputManager().addListener(this, new String[]{"Enter"});
 

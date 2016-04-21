@@ -167,7 +167,7 @@ public class Wall extends Node {
       current.y = WALL_Y_OFFSET;
       wallContext.phyJoint.setPhysicsLocation(current);
       
-      if (current.z > 10) {
+      if (current.z > 11) {
         Main tmp = wallContext.main;
         wallContext.removeControl(this);
         tmp.bullet.getPhysicsSpace().remove(wallContext.joint);
@@ -183,8 +183,8 @@ public class Wall extends Node {
         wallModel.removeControl(wall);
         if (main.level < 6) {
           main.level++;
-          main.mainWall = new Wall(0, tmp);
-          main.getRootNode().attachChild(main.mainWall);
+         // main.mainWall = new Wall(0, tmp);
+          //main.getRootNode().attachChild(main.mainWall);
         } else {
           //main.getStateManager().attach(new EndScreen());
         }
@@ -194,24 +194,7 @@ public class Wall extends Node {
       wall.activate();
 
 
-      if (joint.getHingeAngle() < -0.60f) {
-        //System.out.println("You Lost");
-        BitmapFont fnt = wallContext.main.getAssetManager().loadFont("Interface/Fonts/ComicSansMS.fnt");
-        BitmapText lostText = new BitmapText(fnt);
-        lostText.setSize(fnt.getCharSet().getRenderedSize() * 5);
-        lostText.setColor(ColorRGBA.White);
-        lostText.setText("YOU LOST!!!");
-
-        int lineY = main.getSettings().getHeight() / 2;
-        int lineX = (int) (main.getSettings().getWidth() - lostText.getLineWidth()) / 2;
-
-        lostText.setLocalTranslation(lineX, lineY, 0);
-
-        main.getGuiNode().attachChild(lostText);
-        //wallContext.removeControl(this);
-
-      }
-
+   
       //debugging
       float angleRad = joint.getHingeAngle();
       float angle = angleRad * FastMath.RAD_TO_DEG;
