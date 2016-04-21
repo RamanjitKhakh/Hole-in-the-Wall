@@ -6,6 +6,7 @@ package mygame;
  * initMaterials(); initLightandShadow(); initGeometries(); initCam();
  */
 import com.jme3.app.SimpleApplication;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.joints.HingeJoint;
@@ -60,7 +61,10 @@ public class Main extends SimpleApplication {
   StartScreen s;
   Wall mainWall;
   int level = 0;
-
+  float fadeOut = 1;
+  ColorRGBA ambient, diffused, specular;
+  AudioNode gameShowAudio, Cheer;
+          
   public static void main(String[] args) {
     Main app = new Main();
     initAppScreen(app);
@@ -86,6 +90,7 @@ public class Main extends SimpleApplication {
     initLightandShadow();
     initGeometries();
     initCam();
+    initAudio();
     // call these 3 methods to start
     //initPhysics();
     //initSkeletons();
@@ -102,6 +107,21 @@ public class Main extends SimpleApplication {
   // -------------------------------------------------------------------------
   // Initialization Methods
   // -------------------------------------------------------------------------
+  public void initAudio(){
+      gameShowAudio = new AudioNode(assetManager, "Sounds/gameShow.wav", false);
+      gameShowAudio.setPositional(false);
+      gameShowAudio.setLooping(false);
+      gameShowAudio.setVolume(1);
+      rootNode.attachChild(gameShowAudio);
+      
+      Cheer  = new AudioNode(assetManager, "Sounds/audienceCheer.wav", false);
+      Cheer.setPositional(false);
+      Cheer.setLooping(false);
+      Cheer.setVolume(1);
+      rootNode.attachChild(Cheer);
+      
+  }
+  
   private static void initAppScreen(SimpleApplication app) {
     AppSettings aps = new AppSettings(true);
     Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -132,12 +152,16 @@ public class Main extends SimpleApplication {
     gold.setColor("Specular", ColorRGBA.Gray);
     gold.setFloat("Shininess", 4f); // shininess from 1-128
     
+    ambient = new ColorRGBA(255, 0, 0, fadeOut);
+    diffused = new ColorRGBA(0, 255, 0, fadeOut);
+    specular = new ColorRGBA(100, 100, 100, fadeOut);
+    
     goldFade = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-    goldFade.setTransparent(true);
+    //goldFade.setTransparent(true);
     goldFade.setBoolean("UseMaterialColors", true);
-    goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, 0.5f));
-    goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, 0.5f));
-    goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, 0.5f));
+    goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, fadeOut));
+    goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, fadeOut));
+    goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, fadeOut));
     goldFade.setFloat("Shininess", 4f); // shininess from 1-128
     goldFade.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
     

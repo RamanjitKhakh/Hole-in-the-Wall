@@ -24,6 +24,7 @@ import com.jme3.util.TangentBinormalGenerator;
 import java.text.DecimalFormat;
 import static mygame.Main.gold;
 
+
 public class Wall extends Node {
 
   
@@ -38,18 +39,23 @@ public class Wall extends Node {
 
   public Wall(int i, Main main) {
     this.main = main;
+    main.fadeOut = 1;
+    main.goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, main.fadeOut));
+    main.goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, main.fadeOut));
+    main.goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, main.fadeOut));
+    
     main.curtain1.setLocalTranslation(2.5f, 0, -4.5f);
     main.curtain2.setLocalTranslation(-2.5f, 0, -4.5f);
     //wall model
     if (i == 0) {
-      wallModel = main.getAssetManager().loadModel("Models/Wall9/Wall9.j3o");
+      wallModel = main.getAssetManager().loadModel("Models/Wall6/Wall6.j3o");
     } else {
         
 				wallModel.setLocalScale(2.2f);
         TangentBinormalGenerator.generate(wallModel);
         wallNode = new Node();
         wallNode.attachChild(wallModel);
-        wallNode.setMaterial(gold);
+        wallNode.setMaterial(main.goldFade);
         wallModel.setLocalTranslation(0.0f, 0.0f, -5f);
 
         wallNode.updateModelBound();
@@ -92,7 +98,7 @@ public class Wall extends Node {
     TangentBinormalGenerator.generate(wallModel);
     wallNode = new Node();
     wallNode.attachChild(wallModel);
-    wallNode.setMaterial(gold);
+    wallNode.setMaterial(main.goldFade);
     wallModel.setLocalTranslation(0.0f, 0.0f, -5f);
 
     wallNode.updateModelBound();
@@ -166,8 +172,18 @@ public class Wall extends Node {
       current.z += velocity * tpf;
       current.y = WALL_Y_OFFSET;
       wallContext.phyJoint.setPhysicsLocation(current);
+<<<<<<< HEAD
       
       if (current.z > 11) {
+=======
+      if (current.z > 6){
+          main.fadeOut -= tpf/3;
+          main.goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, main.fadeOut));
+          main.goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, main.fadeOut));
+          main.goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, main.fadeOut));
+      }
+      if (current.z > 10) {
+>>>>>>> 14e42b885814e6bda4b8902d001b2155273990d2
         Main tmp = wallContext.main;
         wallContext.removeControl(this);
         tmp.bullet.getPhysicsSpace().remove(wallContext.joint);
