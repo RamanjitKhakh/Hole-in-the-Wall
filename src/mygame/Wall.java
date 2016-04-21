@@ -172,18 +172,15 @@ public class Wall extends Node {
       current.z += velocity * tpf;
       current.y = WALL_Y_OFFSET;
       wallContext.phyJoint.setPhysicsLocation(current);
-<<<<<<< HEAD
-      
-      if (current.z > 11) {
-=======
+
       if (current.z > 6){
           main.fadeOut -= tpf/3;
           main.goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, main.fadeOut));
           main.goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, main.fadeOut));
           main.goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, main.fadeOut));
       }
-      if (current.z > 10) {
->>>>>>> 14e42b885814e6bda4b8902d001b2155273990d2
+			
+      if (current.z > 11) {
         Main tmp = wallContext.main;
         wallContext.removeControl(this);
         tmp.bullet.getPhysicsSpace().remove(wallContext.joint);

@@ -18,7 +18,7 @@ public class Game extends AbstractAppState implements ActionListener {
 
   Main main;
 	static int NUM_WALLS = 6;
-	static float NUM_SPACING = 0.045f;
+	static float NUM_SPACING = 0.035f;
 	int currentWall = 0;
 	int clearedWalls = 0;
 	boolean playerCollided = false;
