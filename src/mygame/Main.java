@@ -93,10 +93,6 @@ public class Main extends SimpleApplication {
     initGeometries();
     initCam();
     initAudio();
-    // call these 3 methods to start
-    //initPhysics();
-    //initSkeletons();
-    //initGeometriesPostPhysics();
 
   }
 
@@ -181,6 +177,7 @@ public class Main extends SimpleApplication {
     setDisplayStatView(false);
 
     //create the state info break in the top right
+		
     BitmapFont bmf = this.getAssetManager().loadFont("Interface/Fonts/ArialBlack.fnt");
     stateInfoText = new BitmapText(bmf);
     stateInfoText.setSize(bmf.getCharSet().getRenderedSize() * 1f);
@@ -190,9 +187,11 @@ public class Main extends SimpleApplication {
     this.getGuiNode().attachChild(stateInfoText);
 		
 		//create and array of picture objects for the numbers
+		
 		numberPics = new Picture[10];
 		
 		//load up the picture of a slash for the wall number display
+		
 		slashPic = new Picture("slashPic");
 		slashPic.setImage(assetManager, "Textures/UI/numbers/slash.png", true);
 		slashPic.setWidth(CHAR_WIDTH);

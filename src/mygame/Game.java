@@ -51,10 +51,14 @@ public class Game extends AbstractAppState implements ActionListener {
   
   public void initGUI()
   {
+		//create the status text node.
+		//pictures for the status text will be attached to it
+			
 		wallsClearedText = new Node("wallsClearedText");
 		main.getGuiNode().attachChild(wallsClearedText);
 			
     //create and attach the "walls cleared" pic
+		
 		wallsClearedPic = new Picture("startScreenLogo");
 		wallsClearedPic.setImage(main.getAssetManager(), "Textures/UI/wallsCleared.png", true);
 		wallsClearedPic.setWidth(main.getSettings().getWidth()*.27f);
@@ -65,12 +69,15 @@ public class Game extends AbstractAppState implements ActionListener {
 		main.getGuiNode().attachChild(wallsClearedPic);
 		
 		//intialize the numbers for the walls cleared info text
+		
 		updateWallsClearedText();
   }
 
   @Override
   public void update(float tpf) {
+			
     //update the skeleton
+			
     int[][] joints;
     if (main.mocapPlayer) {
       joints = main.player.getJoints();
@@ -83,12 +90,14 @@ public class Game extends AbstractAppState implements ActionListener {
     }
 		
 		//check if the current wall has passed the respawn distance
-		//else check if 
+		//else check if wall is rotated too much
+		
 		if( main.mainWall.phyJoint.getPhysicsLocation().z > 10)
 		{
-				System.out.println("wall has expired...");
+
 				//if the player did not collide with this wall we increment the amount
 				//of walls cleared and update the cleared walls display
+				
 				if(!playerCollided)
 				{
 						clearedWalls++;
@@ -98,6 +107,7 @@ public class Game extends AbstractAppState implements ActionListener {
 						
 				//check if we need to spawn more walls.
 				//If not, transition to the end screen
+				
 				if(currentWall++ < NUM_WALLS)
 				{
 						main.mainWall = new Wall(0, main);
@@ -105,11 +115,11 @@ public class Game extends AbstractAppState implements ActionListener {
 				}else{
 						main.getStateManager().attach(new EndScreen());
 				}
-			
-					System.out.println("cleared walls: " + clearedWalls);
 				
 				//update the wall status text
+				
 				updateWallsClearedText();
+				
 		}else if (main.mainWall.joint.getHingeAngle() > FastMath.QUARTER_PI) {
        
 				playerCollided = true;
@@ -121,6 +131,7 @@ public class Game extends AbstractAppState implements ActionListener {
   public void cleanup() {
   }
 	
+	//draw the amount of walls cleared
 	public void updateWallsClearedText()
 	{
 			//detach all previous pictures in the walls cleared info node
