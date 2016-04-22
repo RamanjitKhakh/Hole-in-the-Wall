@@ -121,7 +121,7 @@ public class Game extends AbstractAppState implements ActionListener {
 				
 				updateWallsClearedText();
 				
-		}else if (main.mainWall.joint.getHingeAngle() > FastMath.QUARTER_PI) {
+		}else if (main.mainWall.joint.getHingeAngle() > -FastMath.QUARTER_PI) {
        
 				playerCollided = true;
      		
