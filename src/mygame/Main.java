@@ -44,8 +44,8 @@ public class Main extends SimpleApplication {
 
   BitmapText stateInfoText;
   public static Material gold, magenta, goldFade;
-	static final float CHAR_WIDTH = 75f;
-	static final float CHAR_HEIGHT = 100f;
+	static final float CHAR_WIDTH = .04f;
+	static final float CHAR_HEIGHT = .07f;
   Geometry geomSphere, geomBox, geomJoint, heightBoxGeo, curtain1, curtain2;
   MocapPlayer player;
   Mocap mocap;
@@ -199,15 +199,15 @@ public class Main extends SimpleApplication {
 		
 		slashPic = new Picture("slashPic");
 		slashPic.setImage(assetManager, "Textures/UI/numbers/slash.png", true);
-		slashPic.setWidth(CHAR_WIDTH);
-		slashPic.setHeight(CHAR_HEIGHT);
+		slashPic.setWidth(getSettings().getWidth()*CHAR_WIDTH);
+		slashPic.setHeight(getSettings().getHeight()*CHAR_HEIGHT);
 				
 		for(int i=0; i < 10 ; i++)
 		{
 			numberPics[i] = new Picture("numberPic" + i);
 			numberPics[i].setImage(assetManager, "Textures/UI/numbers/" + i +".png",true);
-			numberPics[i].setWidth(CHAR_WIDTH);
-			numberPics[i].setHeight(CHAR_HEIGHT);
+			numberPics[i].setWidth(getSettings().getWidth()*CHAR_WIDTH);
+			numberPics[i].setHeight(getSettings().getHeight()*CHAR_HEIGHT);
 		}
   }
 
