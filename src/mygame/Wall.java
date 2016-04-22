@@ -111,23 +111,21 @@ public class Wall extends Node {
 
 				@Override
 				protected void controlUpdate(float tpf) {
-						Vector3f current, curtainPos;
+						Vector3f current, curtainPos, curtain2Pos;
                                                 current = wallContext.phyJoint.getPhysicsLocation();
 						curtainPos = wallContext.main.curtain1.getLocalTranslation();
+                                                curtain2Pos = wallContext.main.curtain2.getLocalTranslation();
 						if ((curtainPos.x < 5) && (current.z < -4) ) {
 								wallContext.main.curtain1.setLocalTranslation(curtainPos.x += tpf, 0, curtainPos.z);
+                                                                wallContext.main.curtain2.setLocalTranslation(curtain2Pos.x -= tpf, 0, curtainPos.z);
 						}else if( (current.z > -4) && (curtainPos.x > 2.5)){
                                                                 wallContext.main.curtain1.setLocalTranslation(curtainPos.x -= tpf, 0, curtainPos.z);
+                                                                wallContext.main.curtain2.setLocalTranslation(curtain2Pos.x += tpf, 0, curtainPos.z);
                                                 }
 
-						curtainPos = wallContext.main.curtain2.getLocalTranslation();
-						if ( (curtainPos.x > -5) && (current.z < -4)) {
-								wallContext.main.curtain2.setLocalTranslation(curtainPos.x -= tpf, 0, curtainPos.z);
-						}else if ((current.z > -4) && (curtainPos.x < -2.5)){
-                                                                wallContext.main.curtain2.setLocalTranslation(curtainPos.x += tpf, 0, curtainPos.z);
+                                                if(joint.getHingeAngle() < -0.60f){
+                                                    main.disapointment.play();
                                                 }
-
-
 						//current = wallContext.phyJoint.getPhysicsLocation();
 						if (velocity < maxVelocity) {
 								velocity += acc * tpf;

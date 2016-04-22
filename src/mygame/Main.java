@@ -65,7 +65,7 @@ public class Main extends SimpleApplication {
   int level = 0;
   float fadeOut = 1;
   ColorRGBA ambient, diffused, specular;
-  AudioNode gameShowAudio, Cheer;
+  AudioNode gameShowAudio, Cheer, disapointment;
           
   public static void main(String[] args) {
     Main app = new Main();
@@ -118,6 +118,11 @@ public class Main extends SimpleApplication {
       Cheer.setVolume(1);
       rootNode.attachChild(Cheer);
       
+      disapointment = new AudioNode(assetManager, "Sounds/aww.wav", false);
+      disapointment.setPositional(false);
+      disapointment.setLooping(false);
+      disapointment.setVolume(1);
+      rootNode.attachChild(disapointment);
   }
   
   private static void initAppScreen(SimpleApplication app) {
