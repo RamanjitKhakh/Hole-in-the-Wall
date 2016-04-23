@@ -19,18 +19,34 @@ public class Game extends AbstractAppState implements ActionListener {
     Main main;
     static int NUM_WALLS = 6;
     static float NUM_SPACING = 0.035f;
+    float CNTDWN_LTTR_TRANS_SPEED = 1.2f;
+    
+    //the size of the countdown letters for start and end
+    //values are relative to screen (0.1f = 10% of screen)
+    float CNTDWN_START_WIDTH = 0.2f;
+    float CNTDWN_START_HEIGHT = 0.3f;
+    float CNTDWN_END_WIDTH = 0.06f;
+    float CNTDWN_END_HEIGHT = 0.1f;
+    float CNTDWN_PAUSE = 0.2f;
+    
     int currentWall = 0;
     int clearedWalls = 0;
+    int countdownCurrent = 3;
+    float countdownPauseTimer = 0;
     boolean playerCollided = false;
+    boolean inCountdown = true;
+    boolean inCountdownPause = false;
+    float currLetterTrans = 0;
     Node wallsClearedText;
-    Picture wallsClearedPic;
+    Picture wallsClearedPic, countdownPic;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         this.main = (Main) app;
-        main.mainWall = new Wall(main.level, main);
+        main.mainWall = new Wall(0, main);
         main.getRootNode().attachChild(main.mainWall);
         main.Cheer.play();
+        main.countdown.play();
         initGUI();
         initCam();
 
@@ -68,8 +84,10 @@ public class Game extends AbstractAppState implements ActionListener {
                 main.getSettings().getHeight() * .05f);
         main.getGuiNode().attachChild(wallsClearedPic);
 
+        countdownPic = (Picture)main.numberPics[3].clone();
+        main.getGuiNode().attachChild(countdownPic);
+        
         //intialize the numbers for the walls cleared info text
-
         updateWallsClearedText();
     }
 
@@ -89,43 +107,102 @@ public class Game extends AbstractAppState implements ActionListener {
             main.player1.draw();
         }
 
+        if(inCountdown)
+        {
+             
+          if(inCountdownPause)
+          {
+            
+            if( (countdownPauseTimer += tpf) >= CNTDWN_PAUSE)
+            {
+              inCountdownPause = false;
+              countdownPauseTimer = 0;
+               //if we are done transitioning from one letter spawn a new letter
+              countdownPic.removeFromParent();
+              
+              if(countdownCurrent == 0)
+              {
+                 inCountdown = false;
+                 countdownPic.removeFromParent();
+                 main.mainWall.active = true;
+                 countdownCurrent = 3;
+              }else{
+                  countdownPic = (Picture)main.numberPics[countdownCurrent].clone();
+                  main.getGuiNode().attachChild(countdownPic);
+                  currLetterTrans = 0;
+              }
+           
+            }
+          }else{
+             //if we are between transitioning from letters draw the letter 
+            if( (currLetterTrans +=tpf*CNTDWN_LTTR_TRANS_SPEED) <= 1)
+            {
+                Float cntdwnW = CNTDWN_START_WIDTH*(1 - currLetterTrans)
+                        + CNTDWN_END_WIDTH * currLetterTrans ;
+                Float cntdwnH = CNTDWN_START_HEIGHT*(1 - currLetterTrans)
+                        + CNTDWN_END_HEIGHT * currLetterTrans;
+                countdownPic.setWidth(main.getSettings().getWidth()*cntdwnW);
+                countdownPic.setHeight(main.getSettings().getHeight()*cntdwnH);
+                countdownPic.setPosition(
+                        main.getSettings().getWidth()*(1-cntdwnW)/2,
+                        main.getSettings().getHeight()*(1-cntdwnH)/2);
+
+            }else if(--countdownCurrent >= 0){
+              inCountdownPause = true;
+
+            }else{
+             
+            }
+          }
+        }else{
+          
+        }
+        
         //check if the current wall has passed the respawn distance
         //else check if wall is rotated too much
 
-        if (main.mainWall.phyJoint.getPhysicsLocation().z > 10) {
-            
-            //if the player did not collide with this wall we increment the amount
-            //of walls cleared and update the cleared walls display
+        if(main.mainWall != null){
+            if (main.mainWall.phyJoint.getPhysicsLocation().z > 10) {
 
-            if (!playerCollided) {
-                //play the cheer sound
-                main.Cheer.play();
-                clearedWalls++;
-            } else {
-                
-                playerCollided = false;
-            }
+              //if the player did not collide with this wall we increment the amount
+              //of walls cleared and update the cleared walls display
 
-            //check if we need to spawn more walls.
-            //If not, transition to the end screen
+              if (!playerCollided) {
+                  //play the cheer sound
+                  main.Cheer.play();
+                  clearedWalls++;
+              } else {
 
-            if (currentWall++ < NUM_WALLS-1) {
-                main.mainWall = new Wall(currentWall, main);
-                main.getRootNode().attachChild(main.mainWall);
-            } else {
-                main.getStateManager().attach(new EndScreen());
-                main.getStateManager().detach(this);
-            }
+                  playerCollided = false;
+              }
 
-            //update the wall status text
+              //check if we need to spawn more walls.
+              //If not, transition to the end screen
 
-            updateWallsClearedText();
+              if (currentWall++ < NUM_WALLS-1) {
+                  main.mainWall = new Wall(currentWall, main);
+                  main.getRootNode().attachChild(main.mainWall);
 
-        } else if (main.mainWall.joint.getHingeAngle() <= -FastMath.QUARTER_PI) {
-            main.disapointment.play();
-            playerCollided = true;
+                  //start countdown 
+                  countdownCurrent = 4;
+                  inCountdown = true;
+                  main.countdown.play();
+              } else {
+                  main.getStateManager().attach(new EndScreen());
+                  main.getStateManager().detach(this);
+              }
 
+              //update the wall status text
+
+              updateWallsClearedText();
+
+          } else if (main.mainWall.joint.getHingeAngle() <= -FastMath.QUARTER_PI) {
+              main.disapointment.play();
+              playerCollided = true;
+
+          }
         }
+        
     }
 
     @Override

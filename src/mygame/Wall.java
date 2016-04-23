@@ -30,6 +30,7 @@ public class Wall extends Node {
   HingeJoint joint;
   private float WALL_SCALE = 2.5f;
   private float WALL_Y_OFFSET = 3.5f;
+  boolean active = false;
 
   public Wall(int i, Main main) {
     this.main = main;
@@ -109,54 +110,54 @@ public class Wall extends Node {
 
     @Override
     protected void controlUpdate(float tpf) {
-      Vector3f current, curtainPos, curtain2Pos;
-      current = wallContext.phyJoint.getPhysicsLocation();
-      curtainPos = wallContext.main.curtain1.getLocalTranslation();
-      curtain2Pos = wallContext.main.curtain2.getLocalTranslation();
-      if ((curtainPos.x < 5) && (current.z < -4)) {
-        wallContext.main.curtain1.setLocalTranslation(curtainPos.x += tpf, 0, curtainPos.z);
-        wallContext.main.curtain2.setLocalTranslation(curtain2Pos.x -= tpf, 0, curtainPos.z);
-      } else if ((current.z > -4) && (curtainPos.x > 2.5)) {
-        wallContext.main.curtain1.setLocalTranslation(curtainPos.x -= tpf, 0, curtainPos.z);
-        wallContext.main.curtain2.setLocalTranslation(curtain2Pos.x += tpf, 0, curtainPos.z);
+      if(active){
+         Vector3f current, curtainPos, curtain2Pos;
+        current = wallContext.phyJoint.getPhysicsLocation();
+        curtainPos = wallContext.main.curtain1.getLocalTranslation();
+        curtain2Pos = wallContext.main.curtain2.getLocalTranslation();
+        if ((curtainPos.x < 5) && (current.z < -4)) {
+          wallContext.main.curtain1.setLocalTranslation(curtainPos.x += tpf, 0, curtainPos.z);
+          wallContext.main.curtain2.setLocalTranslation(curtain2Pos.x -= tpf, 0, curtainPos.z);
+        } else if ((current.z > -4) && (curtainPos.x > 2.5)) {
+          wallContext.main.curtain1.setLocalTranslation(curtainPos.x -= tpf, 0, curtainPos.z);
+          wallContext.main.curtain2.setLocalTranslation(curtain2Pos.x += tpf, 0, curtainPos.z);
+        }
+
+        //current = wallContext.phyJoint.getPhysicsLocation();
+        if (velocity < maxVelocity) {
+          velocity += acc * tpf;
+        }
+        current.z += velocity * tpf;
+        current.y = WALL_Y_OFFSET;
+        wallContext.phyJoint.setPhysicsLocation(current);
+
+        if (current.z > 6) {
+          main.fadeOut -= tpf / 3;
+          main.goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, main.fadeOut));
+          main.goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, main.fadeOut));
+          main.goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, main.fadeOut));
+        }
+
+        if (current.z > 10) {
+          Main tmp = wallContext.main;
+          wallContext.removeControl(this);
+          tmp.bullet.getPhysicsSpace().remove(wallContext.joint);
+          tmp.bullet.getPhysicsSpace().remove(wallContext.phyJoint);
+          tmp.bullet.getPhysicsSpace().remove(wallContext.geomJoint);
+          tmp.bullet.getPhysicsSpace().remove(wallContext.wall);
+          tmp.getRootNode().detachChild(wallContext.wallModel);
+          tmp.getRootNode().detachChild(wallContext.wallNode);
+          tmp.getRootNode().detachChild(wallContext.geomJoint);
+          tmp.getRootNode().detachChild(wallContext);
+
+
+          wallModel.removeControl(wall);
+          //main.level++;
+        }
+        joint.enableMotor(false, 0, 0);
+        wall.activate();
       }
-
-//      if (joint.getHingeAngle() < -0.60f) {
-//        main.disapointment.play();
-//      }
-      //current = wallContext.phyJoint.getPhysicsLocation();
-      if (velocity < maxVelocity) {
-        velocity += acc * tpf;
-      }
-      current.z += velocity * tpf;
-      current.y = WALL_Y_OFFSET;
-      wallContext.phyJoint.setPhysicsLocation(current);
-
-      if (current.z > 6) {
-        main.fadeOut -= tpf / 3;
-        main.goldFade.setColor("Ambient", new ColorRGBA(255, 0, 0, main.fadeOut));
-        main.goldFade.setColor("Diffuse", new ColorRGBA(0, 255, 0, main.fadeOut));
-        main.goldFade.setColor("Specular", new ColorRGBA(100, 100, 100, main.fadeOut));
-      }
-
-      if (current.z > 10) {
-        Main tmp = wallContext.main;
-        wallContext.removeControl(this);
-        tmp.bullet.getPhysicsSpace().remove(wallContext.joint);
-        tmp.bullet.getPhysicsSpace().remove(wallContext.phyJoint);
-        tmp.bullet.getPhysicsSpace().remove(wallContext.geomJoint);
-        tmp.bullet.getPhysicsSpace().remove(wallContext.wall);
-        tmp.getRootNode().detachChild(wallContext.wallModel);
-        tmp.getRootNode().detachChild(wallContext.wallNode);
-        tmp.getRootNode().detachChild(wallContext.geomJoint);
-        tmp.getRootNode().detachChild(wallContext);
-
-
-        wallModel.removeControl(wall);
-        //main.level++;
-      }
-      joint.enableMotor(false, 0, 0);
-      wall.activate();
+     
     }
 
     @Override
