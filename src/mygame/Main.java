@@ -108,7 +108,7 @@ public class Main extends SimpleApplication {
   public void initAudio(){
       gameShowAudio = new AudioNode(assetManager, "Sounds/gameShow.wav", false);
       gameShowAudio.setPositional(false);
-      gameShowAudio.setLooping(false);
+      gameShowAudio.setLooping(true);
       gameShowAudio.setVolume(1);
       rootNode.attachChild(gameShowAudio);
       

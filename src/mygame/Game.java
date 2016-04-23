@@ -30,7 +30,7 @@ public class Game extends AbstractAppState implements ActionListener {
         this.main = (Main) app;
         main.mainWall = new Wall(main.level, main);
         main.getRootNode().attachChild(main.mainWall);
-
+        main.Cheer.play();
         initGUI();
         initCam();
 
@@ -98,8 +98,11 @@ public class Game extends AbstractAppState implements ActionListener {
             //of walls cleared and update the cleared walls display
 
             if (!playerCollided) {
+                //play the cheer sound
+                main.Cheer.play();
                 clearedWalls++;
             } else {
+                
                 playerCollided = false;
             }
 
@@ -119,7 +122,7 @@ public class Game extends AbstractAppState implements ActionListener {
             updateWallsClearedText();
 
         } else if (main.mainWall.joint.getHingeAngle() <= -FastMath.QUARTER_PI) {
-
+            main.disapointment.play();
             playerCollided = true;
 
         }
