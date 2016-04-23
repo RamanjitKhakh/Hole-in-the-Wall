@@ -93,7 +93,7 @@ public class Game extends AbstractAppState implements ActionListener {
         //else check if wall is rotated too much
 
         if (main.mainWall.phyJoint.getPhysicsLocation().z > 10) {
-            System.out.println("clearred walls "+ clearedWalls);
+            
             //if the player did not collide with this wall we increment the amount
             //of walls cleared and update the cleared walls display
 
@@ -118,7 +118,7 @@ public class Game extends AbstractAppState implements ActionListener {
 
             updateWallsClearedText();
 
-        } else if (main.mainWall.joint.getHingeAngle() > -FastMath.QUARTER_PI) {
+        } else if (main.mainWall.joint.getHingeAngle() <= -FastMath.QUARTER_PI) {
 
             playerCollided = true;
 
