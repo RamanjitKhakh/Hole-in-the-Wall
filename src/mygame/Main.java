@@ -121,7 +121,7 @@ public class Main extends SimpleApplication {
       disapointment = new AudioNode(assetManager, "Sounds/aww.wav", false);
       disapointment.setPositional(false);
       disapointment.setLooping(false);
-      disapointment.setVolume(1);
+      disapointment.setVolume(1.5f);
       rootNode.attachChild(disapointment);
   }
   

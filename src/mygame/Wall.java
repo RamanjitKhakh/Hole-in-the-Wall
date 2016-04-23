@@ -43,11 +43,9 @@ public class Wall extends Node {
 
 				//load appropriate wall model
 
-				if (i == 0) {
-						wallModel = main.getAssetManager().loadModel("Models/Wall6/Wall6.j3o");
-				} else {
-						wallModel = main.getAssetManager().loadModel("Models/Wall" + i + "/Wall" + i + ".j3o");
-				}
+				
+                                wallModel = main.getAssetManager().loadModel("Models/Wall" + i + "/Wall" + i + ".j3o");
+				
 
 				//scale and position the model
 
@@ -155,7 +153,7 @@ public class Wall extends Node {
 
 
 								wallModel.removeControl(wall);
-
+                                                                //main.level++;
 						}
 						joint.enableMotor(false, 0, 0);
                                                 wall.activate();
