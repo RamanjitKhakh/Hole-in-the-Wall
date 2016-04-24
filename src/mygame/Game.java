@@ -179,7 +179,7 @@ public class Game extends AbstractAppState implements ActionListener {
               //check if we need to spawn more walls.
               //If not, transition to the end screen
 
-              if (currentWall++ < NUM_WALLS-1) {
+              if (currentWall++ < NUM_WALLS) {
                   main.mainWall = new Wall(currentWall, main);
                   main.getRootNode().attachChild(main.mainWall);
 
