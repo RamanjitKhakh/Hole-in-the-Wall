@@ -70,6 +70,7 @@ public class Skeleton extends Node {
         bones = new Geometry[jointIndices.length];
         this.bullet = main.bullet;
         initBones();
+       // this.rotate(0, FastMath.PI, 0);
     }
 
     // copy array of joint positions into joint-array

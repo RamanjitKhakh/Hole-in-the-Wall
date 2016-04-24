@@ -65,7 +65,7 @@ public class Main extends SimpleApplication {
   int level = 0;
   float fadeOut = 1;
   ColorRGBA ambient, diffused, specular;
-  AudioNode gameShowAudio, Cheer, disapointment;
+  AudioNode gameShowAudio, Cheer, disapointment, countdown;
           
   public static void main(String[] args) {
     Main app = new Main();
@@ -108,14 +108,14 @@ public class Main extends SimpleApplication {
   public void initAudio(){
       gameShowAudio = new AudioNode(assetManager, "Sounds/gameShow.wav", false);
       gameShowAudio.setPositional(false);
-      gameShowAudio.setLooping(false);
+      gameShowAudio.setLooping(true);
       gameShowAudio.setVolume(1);
       rootNode.attachChild(gameShowAudio);
       
       Cheer  = new AudioNode(assetManager, "Sounds/audienceCheer.wav", false);
       Cheer.setPositional(false);
       Cheer.setLooping(false);
-      Cheer.setVolume(1);
+      Cheer.setVolume(0.8f);
       rootNode.attachChild(Cheer);
       
       disapointment = new AudioNode(assetManager, "Sounds/aww.wav", false);
@@ -123,6 +123,12 @@ public class Main extends SimpleApplication {
       disapointment.setLooping(false);
       disapointment.setVolume(1.5f);
       rootNode.attachChild(disapointment);
+      
+      countdown = new AudioNode(assetManager, "Sounds/countdown.wav", false);
+      countdown.setPositional(false);
+      countdown.setLooping(false);
+      countdown.setVolume(1.5f);
+      rootNode.attachChild(countdown);
   }
   
   private static void initAppScreen(SimpleApplication app) {
