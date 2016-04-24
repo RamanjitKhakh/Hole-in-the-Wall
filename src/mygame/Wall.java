@@ -8,6 +8,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.joints.HingeJoint;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -121,7 +122,7 @@ public class Wall extends Node {
                                                                 wallContext.main.curtain2.setLocalTranslation(curtain2Pos.x += tpf, 0, curtainPos.z);
                                                 }
 
-                                                if(joint.getHingeAngle() < -0.60f){
+                                                if(joint.getHingeAngle() < -FastMath.QUARTER_PI){
                                                     main.disapointment.play();
                                                 }
 						//current = wallContext.phyJoint.getPhysicsLocation();
