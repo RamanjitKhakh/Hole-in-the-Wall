@@ -15,6 +15,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 
@@ -33,10 +34,22 @@ public class EndScreen extends AbstractAppState implements ActionListener {
     final float OVERLAY_FINAL_TRANS = 0.6f;
     float GAME_OVER_FINAL_POS;
     final float GAME_OVER_SPEED = 0.6f;
+    int clearedWall = 0;
+    int totalWall = 0;
+    Node wallsClearedText;
+    
+    public EndScreen(int cleared, int total){
+        this.clearedWall = cleared;
+        this.totalWall = total;
+        wallsClearedText = new Node("wallsClearedText");
+        
+        
+
+    }
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
-      this.main = (Main)app;  
+      this.main = (Main)app;
       GAME_OVER_FINAL_POS = main.getSettings().getHeight()*.45f;
       ((Main) app).getGuiNode().detachAllChildren();
         AppSettings settings = ((Main) app).getSettings();
@@ -68,6 +81,37 @@ public class EndScreen extends AbstractAppState implements ActionListener {
       main.getInputManager().addListener(this, new String[]{"Enter"});
       
       
+      
+       //first number
+        Picture p = (Picture) main.numberPics[clearedWall].clone();
+        p.setPosition(
+                main.getSettings().getWidth() * 0.3f,
+                main.getSettings().getHeight() * 0.05f);
+        wallsClearedText.attachChild(p);
+
+        //slash
+        p = (Picture) main.slashPic.clone();
+        p.setPosition(
+                main.getSettings().getWidth() * (0.3f + 0.035f),
+                main.getSettings().getHeight() * 0.05f);
+        wallsClearedText.attachChild(p);
+
+        //second number
+        p = (Picture) main.numberPics[totalWall+1].clone();
+        p.setPosition(
+                main.getSettings().getWidth() * (0.3f + 0.035f * 2),
+                main.getSettings().getHeight() * 0.05f);
+        wallsClearedText.attachChild(p);
+         main.getGuiNode().attachChild(wallsClearedText);
+         
+        Picture wallsClearedPic = new Picture("startScreenLogo");
+        wallsClearedPic.setImage(main.getAssetManager(), "Textures/UI/wallsCleared.png", true);
+        wallsClearedPic.setWidth(main.getSettings().getWidth() * .27f);
+        wallsClearedPic.setHeight(main.getSettings().getHeight() * .08f);
+        wallsClearedPic.setPosition(
+                main.getSettings().getWidth() * .025f,
+                main.getSettings().getHeight() * .05f);
+        main.getGuiNode().attachChild(wallsClearedPic);
     
     }
 
@@ -76,7 +120,7 @@ public class EndScreen extends AbstractAppState implements ActionListener {
       
       if(overlayCurrTrans < OVERLAY_FINAL_TRANS)
       {
-        System.out.println("currTrans: " + overlayCurrTrans);
+        
         overlayCurrTrans+=tpf*OVERLAY_FADE_SPEED;
         Material overlayMat = overlay.getMaterial();
         overlayMat.setColor("Color", new ColorRGBA(0,0,0,overlayCurrTrans));
@@ -96,6 +140,6 @@ public class EndScreen extends AbstractAppState implements ActionListener {
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 }

@@ -188,7 +188,7 @@ public class Game extends AbstractAppState implements ActionListener {
                   inCountdown = true;
                   main.countdown.play();
               } else {
-                  main.getStateManager().attach(new EndScreen());
+                  main.getStateManager().attach(new EndScreen(clearedWalls, NUM_WALLS));
                   main.getStateManager().detach(this);
               }
 
@@ -213,7 +213,7 @@ public class Game extends AbstractAppState implements ActionListener {
     public void updateWallsClearedText() {
         //detach all previous pictures in the walls cleared info node
         wallsClearedText.detachAllChildren();
-        System.out.println("updating walls cleared text");
+        
 
         //first number
         Picture p = (Picture) main.numberPics[clearedWalls].clone();
@@ -230,7 +230,7 @@ public class Game extends AbstractAppState implements ActionListener {
         wallsClearedText.attachChild(p);
 
         //second number
-        p = (Picture) main.numberPics[NUM_WALLS].clone();
+        p = (Picture) main.numberPics[NUM_WALLS+1].clone();
         p.setPosition(
                 main.getSettings().getWidth() * (0.3f + NUM_SPACING * 2),
                 main.getSettings().getHeight() * 0.05f);
